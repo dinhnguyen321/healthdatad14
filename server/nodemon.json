@@ -1,0 +1,10 @@
+{
+    "watch": ["src","server.js","routes"],
+    "ext": "js,ts,json",
+    "ignore": ["src/*"],
+    "execMap": {
+      "ts": "ts-node"
+    },
+    "restartable":"rs",
+    "delay": "2500ms"
+  }
