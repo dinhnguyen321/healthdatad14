@@ -1,8 +1,11 @@
 import React, {useEffect} from "react";
 import {
+  Navigate,
   Route, Routes, useLocation
 } from "react-router-dom"
 import Dashboard from "./pages/Dashboard";
+import MainLayout from "./layouts/MainLayout";
+import UserManager from "./pages/UserManager";
 function App() {
   const location = useLocation();
 
@@ -15,7 +18,11 @@ function App() {
   return (
     <>
     <Routes>
-        <Route exact path="/" element={<Dashboard/>}/>
+      <Route  element={<MainLayout/>}>
+      <Route  path="/" element={<Navigate to="/dashboard" replace/>}/>
+      <Route  path="/dashboard" element={<Dashboard/>}/>
+      <Route  path="/user-manager" element={<UserManager/>}/>
+      </Route>
     </Routes>
     </>
   );

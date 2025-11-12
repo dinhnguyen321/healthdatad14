@@ -4,9 +4,9 @@ import DropdownProfile from '../components/UI/DropdownProfile';
 function Header({sidebarOpen,setSidebarOpen}) {
     
     return (
-        <div className=' p-4 pb-6 bg-[#1e2939] lg:bg-amber-200 lg:text-black'>
+        <div className='p-4 border-b-2 border-gray-300 bg-white lg:text-black'>
                   {/* Header: Left side */}
-          <div className="flex justify-between">
+          <div className="flex items-center justify-between">
 {/* Hamburger button */}
 <button
   className="text-gray-500 hover:text-gray-600 dark:hover:text-gray-400 lg:hidden"
