@@ -1,28 +1,37 @@
-import React, {useEffect} from "react";
+import React from "react";
 import {
   Navigate,
-  Route, Routes, useLocation
+  Route, Routes
 } from "react-router-dom"
 import Dashboard from "./pages/Dashboard";
 import MainLayout from "./layouts/MainLayout";
 import UserManager from "./pages/UserManager";
+import Signin from "./components/AuthLayout/Signin";
+import {AuthGuard,IsLoggedIn} from "./layouts/ProtectedRoute.jsx";
 function App() {
-  const location = useLocation();
-
-  useEffect(() => {
-    document.querySelector('html').style.scrollBehavior = 'auto'
-    window.scroll({ top: 0 })
-    document.querySelector('html').style.scrollBehavior = ''
-  }, [location.pathname]); // triggered on route change
-
-  return (
+const isLoggedIn = IsLoggedIn()
+return (
     <>
     <Routes>
-      <Route  element={<MainLayout/>}>
-      <Route  path="/" element={<Navigate to="/dashboard" replace/>}/>
-      <Route  path="/dashboard" element={<Dashboard/>}/>
-      <Route  path="/user-manager" element={<UserManager/>}/>
-      </Route>
+    {/* Chuyển hướng người dùng đến trang phù hợp ngay từ đầu */}
+      <Route
+        path={"/"}  
+        element={<Navigate to={isLoggedIn ? "dashboard":"/account/signin"} replace/> }  
+      />
+      {/* Tuyến đường Đăng nhập (/signin) */}
+       <Route
+        path={"/account/signin"}  
+        element={isLoggedIn ? <Navigate to={"/dashboard"} replace/>: <Signin/> }  
+      />
+      {/* AuthGuard sẽ kiểm tra đăng nhập cho tất cả các Route con */}
+       <Route element={<AuthGuard/>}> 
+            <Route element={<MainLayout/>}>
+                <Route path="/" element={<Navigate to="/dashboard" replace/>}/>
+                <Route path="/dashboard" element={<Dashboard/>}/>
+                <Route path="/user-manager" element={<UserManager/>}/>
+            </Route> 
+       </Route> 
+       
     </Routes>
     </>
   );

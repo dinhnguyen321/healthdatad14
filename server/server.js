@@ -4,6 +4,7 @@ import session from 'express-session';
 import dotenv from 'dotenv';
 // import authUser from'./routes/authRoutes'
 import userRouters from "./routes/userRoutes.js"
+import LoginRouters from "./routes/loginRoutes.js"
 import { testConnection } from './routes/testConnection.js';
 dotenv.config();
 
@@ -27,6 +28,7 @@ app.use(
 // test cảm biến window hello
 // app.use('api/auth/',authUser)
 app.use("/api/users",userRouters)
+app.use("/account",LoginRouters)
 testConnection()
 
 app.listen(process.env.PORT, () =>

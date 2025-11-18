@@ -13,6 +13,7 @@ function MainLayout() {
                     <main className='sm:flex sm:justify-between sm:items-center mb-8 p-5'>
                     <Outlet/>
                     </main>
+        
             </div>
         </div>
     );

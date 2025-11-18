@@ -5,6 +5,7 @@ import {PrismaClient} from "@prisma/client";
 
 // Lấy danh sách user
 export const getAllUsers = async (req, res) => {
+
   try {
       const users = await prisma.users.findMany();
       res.json(users);
@@ -16,27 +17,37 @@ export const getAllUsers = async (req, res) => {
     }
   };
   
+const checkUserExist = async(email) => {
+    try {
+     const checkUser = await prisma.users.findUnique({ where: { email:email } });
+      res.json({ message: "Chưa có người dùng" });
+      console.log("checkUser: ",checkUser);
+      
+    } catch (error) {
+      res.status(500).json({ message: "Lỗi khi xóa người dùng", error });
+    }
+}
+
   // Tạo user mới
   export const createUser = async (req, res) => {
-    console.log("req",req);
-    
+    const {name, email, phone, password} = req.body
     try {
-      const { name, email, password } = req.body;
-
-      // const hashPassword = bcrypt.hash(password,10)
-
+      if(!checkUserExist(email)){
+      const hashPassword = await bcrypt.hash(password,10)
+      
       // kiểm tra input
-      if (!name || !email || !password) {
+      if (!name || !email || !password || !phone) {
       return res.status(400).json({ message: "Thiếu thông tin bắt buộc" });
       }
       const user = await prisma.users.create({
-        data: { name, email, password },
+        data: { name, email, password:hashPassword, phone},
       });
       res.status(201).json(user);
+    }
     } catch (error) {
       res.status(500).json({ message: "Lỗi khi tạo người dùng", error });
     }
-  };
+};
   
   // Cập nhật user
   export const updateUser = async (req, res) => {

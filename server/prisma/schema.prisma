@@ -8,11 +8,24 @@ datasource db {
 }
 
 model users {
-  idUser    String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name      String    @db.VarChar(100)
-  email     String    @unique @db.VarChar(100)
-  password  String    @db.VarChar(100)
-  create_at DateTime? @db.Timestamp(6)
+  idUser          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name            String    @db.VarChar(100)
+  email           String    @unique @db.VarChar(100)
+  password        String    @db.VarChar(100)
+  create_at       DateTime? @db.Timestamp(6)
+  phone           Int?      @unique
+  birth_day       DateTime? @db.Date
+  birth_place     String?   @db.VarChar(255)
+  ward            String?   @db.VarChar(100)
+  ethnicity       String?   @db.VarChar(100)
+  religion        String?   @db.VarChar(100)
+  blood_type      String?   @db.VarChar(50)
+  education_level String?   @db.VarChar(100)
+  national_id     Int?
+  national_place  String?   @db.VarChar(100)
+  hometown        String?   @db.VarChar(100)
+  address         String?   @db.VarChar(100)
+  role            String?   @db.VarChar(100)
 }
 
 model categories {
