@@ -20,8 +20,16 @@ const SignUp = () => {
         // reset trước khi valid
         setTextValid({
             textEmail: "",
-            textPassword: ""
+            textPassword: "",
+            textName:""
         });
+        // Kiểm tra name
+        if(!data.name){
+            const messageN = 'Tên không được để trống';
+            setTextValid((prev)=>({...prev,textName:messageN}))  
+            isValid = false
+        }
+
         // Kiểm tra email
         if(!data.email){
             const messageE = 'Email không được để trống';
@@ -61,13 +69,17 @@ const SignUp = () => {
                 email:data.email,
                 password:data.password,
                 role:"user",
+                name:data.name
             }
-            console.log("dataRegister",dataRegister);
           
             try {
                 if(validateForm()){
                 const res = await axios.post("http://localhost:4000/account/register",dataRegister)
-                console.log("res signup: ",res.data);
+                if(res.data){
+                    setInterval(()=>{
+                        window.location.href = "/account/signin"
+                    },1000)
+                }
             }
             } catch (error) {
                 console.log("error signup: ", error);
@@ -92,6 +104,25 @@ const SignUp = () => {
               <div className='h-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 
                 bg-300% animate-gradient-flow'></div>
               <form className="space-y-4 md:space-y-6" action="" onSubmit={(e)=>handleSignup(e)}>
+              <div>
+                      <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Họ và tên</label>
+                      <input 
+                      onChange={(e)=>onChangeInput(e)}
+                      type="text" 
+                      name="name" 
+                      id="name" 
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                       placeholder="Nguyễn Văn A" 
+                      required=""/>
+                        {
+                        textValid.textName ? (
+                        <p className="mt-2 px-3 text-red-500 rounded text-sm font-semibold">
+                        {textValid.textName}
+                        </p>
+                        ):""
+                      }
+                  </div>
+                  
                   <div>
                       <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email của bạn</label>
                       <input 

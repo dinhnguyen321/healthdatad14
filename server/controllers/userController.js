@@ -33,12 +33,11 @@ const checkUserExist = async(email) => {
     const {name, email, phone, password} = req.body
     try {
       if(!checkUserExist(email)){
-      const hashPassword = await bcrypt.hash(password,10)
-      
       // kiểm tra input
       if (!name || !email || !password || !phone) {
       return res.status(400).json({ message: "Thiếu thông tin bắt buộc" });
       }
+      const hashPassword = await bcrypt.hash(password,10)
       const user = await prisma.users.create({
         data: { name, email, password:hashPassword, phone},
       });

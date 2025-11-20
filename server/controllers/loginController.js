@@ -3,46 +3,57 @@ import {PrismaClient} from "@prisma/client";
  const prisma = new PrismaClient();
 
   // Tạo user mới
-  export const signUp = async (req, res) => {
-    const {name, email, phone, password, role} = req.body
+  export const register = async (req, res) => {
+    const {email, password, role, name} = req.body
+    const exist = await checkUserExist(email)
     try {
-      if(!checkUserExist(email)){
-      const hashPassword = await bcrypt.hash(password,10)
+      if(exist){
+        return  res.status(302).json({message:"Người dùng này đã tồn tại"})
+      }
       
       // kiểm tra input
-      if (!name || !email || !password || !phone || !role) {
+      if (!email || !password || !role || !name) {
       return res.status(400).json({ message: "Thiếu thông tin bắt buộc" });
       }
+
+      const hashPassword = await bcrypt.hash(password,10)
+      
       const user = await prisma.users.create({
-        data: { name, email, password:hashPassword, phone,role},
+        data: {email, password:hashPassword, role, name},
       });
-      res.status(201).json(user);
-    }else{
-      res.status(302).json({message:"Người dùng này đã tồn tại"})
+      return res.status(200).json(user);
     }
-    } catch (error) {
-      res.status(500).json({ message: "Lỗi khi tạo người dùng", error });
+     catch (error) {
+      return res.status(500).json({ message: "Lỗi khi tạo người dùng"});
     }
 };
 
 export const signIn= async (req, res) => {
-  const {email, password} = req.body 
   try {
-    if(email, password){
+    const {email, password} = req.body 
+    if(!email && !password){
+      return res.status(400).json({ message: "Thiếu email hoặc mật khẩu" });
+    }
+  
         const users = await prisma.users.findUnique({
-          where:{
-            email:email,
-            password:password
-          }
+          where:{ email:email}
         });
-        console.log("users: ",users);
+
+        if(!users){
+          return res.status(404).json({ message: "Không tìm thấy người dùng" });
+        }
+
+        const match = await bcrypt.compare(password,users.password)
+
+        if(!match){
+          return res.status(401).json({ message: "Sai mật khẩu" });
+        }
         
-         res.json({
+        return res.json({
           name:users.name,
           idUser:users.idUser,
           role:users.role
          });
-    }
     } catch (error) {
       res.status(500).json({
         message: "Lỗi khi lấy danh sách người dùng",
@@ -54,10 +65,8 @@ export const signIn= async (req, res) => {
   const checkUserExist = async(email) => {
       try {
        const checkUser = await prisma.users.findUnique({ where: { email:email } });
-        res.json({ message: "Chưa có người dùng" });
-        console.log("checkUser: ",checkUser);
-        
+        return !!checkUser 
       } catch (error) {
-        res.status(500).json({ message: "Lỗi khi xóa người dùng", error });
+        return res.status(500).json({ message: "Lỗi khi xóa người dùng", error });
       }
   }
