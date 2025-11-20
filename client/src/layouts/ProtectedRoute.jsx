@@ -1,7 +1,6 @@
 import React from 'react';
 import { Navigate,Outlet } from 'react-router-dom';
 
-// function ProtectedRoute() {
    // Hàm Kiểm Tra Trạng Thái Đăng Nhập
  export const IsLoggedIn = () => {
     const userName = localStorage.getItem('name');
@@ -17,4 +16,3 @@ import { Navigate,Outlet } from 'react-router-dom';
     }
     return <Outlet />;
   }
-  // }

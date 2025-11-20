@@ -32,13 +32,15 @@ const Signin = () => {
             }
     }
     return (
-        <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
-        <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          <img src={logo} alt="Your Company" className="mx-auto h-16 w-auto" />
-          <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-white uppercase">Đăng Nhập Tài Khoản</h2>
-        </div>
+        <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8 dark:bg-gray-900">
         
-        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+        <div className="sm:mx-auto sm:w-full sm:max-w-sm dark:bg-gray-800 p-6 space-y-4 md:space-y-6 sm:p-8 rounded-lg shadow">
+        <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+          <img src={logo} alt="HealthDataD14" className="mx-auto h-20 w-auto rounded-full" />
+          <p className="mt-5 bg-clip-text uppercase text-transparent bg-gradient-to-r from-indigo-500 to-purple-500 font-bold leading-tight tracking-tight text-lg text-center lg:text-xl">Đăng Nhập Tài Khoản</p>
+          <div className='h-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 
+                bg-300% animate-gradient-flow'></div>
+        </div>
           <form action="" method="POST" className="space-y-6">
             <div>
               <label htmlFor="email" className="block text-sm/6 font-medium text-gray-100">Địa chỉ Email</label>
@@ -76,10 +78,10 @@ const Signin = () => {
               theme="light"
               transition={Bounce}
               />
-          {/* <p className="mt-10 text-center text-sm/6 text-gray-400">
-            Not a member?
-            <a href="#" className="font-semibold text-indigo-400 hover:text-indigo-300">Start a 14 day free trial</a>
-          </p> */}
+          <p className="mt-10 text-center text-sm/6 text-gray-400">
+            Bạn chưa có tài khoản?
+            <a href="/account/register" className="pl-2 font-semibold text-indigo-400 hover:text-indigo-300">Đăng ký ngay!</a>
+          </p>
         </div>
         </div>
     );

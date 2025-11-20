@@ -1,8 +1,14 @@
 import React from 'react';
 import DropdownProfile from '../components/UI/DropdownProfile';
 
-function Header({sidebarOpen,setSidebarOpen}) {
-    
+function Header({sidebarOpen,setSidebarOpen,profileUser}) {
+    const logOut = () => {
+      localStorage.clear()
+      window.location.reload()
+    }
+    const detailUser = () => {
+      alert("Có gì đâu mà coi")
+    }
     return (
         <div className='p-4 border-b-2 border-gray-300 bg-white lg:text-black'>
                   {/* Header: Left side */}
@@ -28,16 +34,18 @@ function Header({sidebarOpen,setSidebarOpen}) {
   </div>  
   <div className='flex space-x-2 items-center'>
     <p>
-      Trần Đinh Nguyễn
+      {profileUser ? profileUser.name : "USER"}
     </p>
   <DropdownProfile items={[
     {
       name:"Hồ Sơ Người Dùng",
       href:"/profile-user",
+      onClick:detailUser
     },
     {
       name:"Đăng Xuất",
-      href:"/logout",
+      href:"/",
+      onClick:logOut
     }
   ]}/>
    

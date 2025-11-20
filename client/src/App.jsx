@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Navigate,
   Route, Routes
@@ -8,8 +8,18 @@ import MainLayout from "./layouts/MainLayout";
 import UserManager from "./pages/UserManager";
 import Signin from "./components/AuthLayout/Signin";
 import {AuthGuard,IsLoggedIn} from "./layouts/ProtectedRoute.jsx";
+import SignUp from "./components/AuthLayout/SignUp.jsx";
 function App() {
 const isLoggedIn = IsLoggedIn()
+const [profileUser,setProfileUser] = useState({})
+
+useEffect(()=>{
+    const name = localStorage.getItem("name")
+    const role = localStorage.getItem("role")
+  if(isLoggedIn){
+    setProfileUser({name:name,role:role})
+  }
+},[isLoggedIn])
 return (
     <>
     <Routes>
@@ -23,9 +33,13 @@ return (
         path={"/account/signin"}  
         element={isLoggedIn ? <Navigate to={"/dashboard"} replace/>: <Signin/> }  
       />
+       <Route
+        path={"/account/register"}  
+        element={isLoggedIn ? <Navigate to={"/dashboard"} replace/>: <SignUp/> }   
+      />
       {/* AuthGuard sẽ kiểm tra đăng nhập cho tất cả các Route con */}
        <Route element={<AuthGuard/>}> 
-            <Route element={<MainLayout/>}>
+            <Route element={<MainLayout profileUser={profileUser}/>}>
                 <Route path="/" element={<Navigate to="/dashboard" replace/>}/>
                 <Route path="/dashboard" element={<Dashboard/>}/>
                 <Route path="/user-manager" element={<UserManager/>}/>

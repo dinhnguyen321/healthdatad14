@@ -4,7 +4,6 @@ import {TransitionGroup, CSSTransition, } from "react-transition-group";
 function DropdownProfile({items}) {
     const [show, setShow] = useState(false)
     const nodeRef = useRef(null);
- 
     return (
         <div className='relative'>
              <button 
@@ -25,7 +24,9 @@ function DropdownProfile({items}) {
             <CSSTransition classNames="fade" nodeRef={nodeRef} timeout={300} in={show} unmountOnExit >
                 <div ref={nodeRef} className='rounded-l-xl fixed top-18 right-0 bg-white p-4 flex flex-col space-y-2'>
                     {items.map((item,idx)=>(
-                        <button key={idx} className='text-white border-gray-300 rounded-xl overflow-hidden py-2 px-4 bg-white flex items-center justify-center space-x-2 border-2'>
+                        <button
+                         onClick={item.onClick}
+                         key={idx} className='text-white border-gray-300 rounded-xl overflow-hidden py-2 px-4 bg-white flex items-center justify-center space-x-2 border-2'>
                             <a className='hover:text-white' href={item.href}>{item.name}</a>
                         </button>   
                     ))}
