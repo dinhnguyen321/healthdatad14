@@ -88,7 +88,7 @@ const SignUp = () => {
     }
     return (
         <>
-        <section className="bg-gray-50 dark:bg-gray-900">
+        <section className=" bg-gray-50 dark:bg-gray-900">
         <div className="grid grid-cols-12 w-full px-6 py-8 mx-auto lg:py-0">
        <div className='hidden col-span-4 lg:flex justify-center items-center'>
          <a href="/" className="flex flex-col justify-center w-full items-center space-y-4 text-2xl font-semibold text-gray-900 dark:text-white">

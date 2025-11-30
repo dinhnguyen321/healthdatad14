@@ -17,6 +17,18 @@ export const getAllUsers = async (req, res) => {
     }
   };
   
+ export const getUserById = async(req,res)=> {
+    const id = req.params.id;
+    try {
+      const user = await prisma.users.findUnique({where:{idUser:id}});
+      res.json(user);
+    } catch (error) {
+      res.status(500).json({
+        message: "Lỗi khi thông tin 1 người dùng",
+        error: error.meta || error.message || error,
+      });
+    }
+  }
 const checkUserExist = async(email) => {
     try {
      const checkUser = await prisma.users.findUnique({ where: { email:email } });

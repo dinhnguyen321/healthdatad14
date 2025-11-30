@@ -5,6 +5,8 @@ import {PrismaClient} from "@prisma/client";
   // Tạo user mới
   export const register = async (req, res) => {
     const {email, password, role, name} = req.body
+    console.log("data regis", email, password, role, name);
+    
     const exist = await checkUserExist(email)
     try {
       if(exist){

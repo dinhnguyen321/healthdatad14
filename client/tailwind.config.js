@@ -1,4 +1,9 @@
 export const theme = {
+    darkMode: 'class',   // <--- PHẢI CÓ
+    content: [
+      "./index.html",
+      "./src/**/*.{js,ts,jsx,tsx}",
+    ],
     extend: {
         animation: {
             'gradient-flow': 'gradient-animation 3s ease infinite',
