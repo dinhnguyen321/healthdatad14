@@ -5,7 +5,6 @@ import {PrismaClient} from "@prisma/client";
 
 // Lấy danh sách user
 export const getAllUsers = async (req, res) => {
-
   try {
       const users = await prisma.users.findMany();
       res.json(users);
@@ -31,30 +30,34 @@ export const getAllUsers = async (req, res) => {
   }
 const checkUserExist = async(email) => {
     try {
-     const checkUser = await prisma.users.findUnique({ where: { email:email } });
-      res.json({ message: "Chưa có người dùng" });
-      console.log("checkUser: ",checkUser);
-      
+       const checkUser = await prisma.users.findUnique({ where: { email:email } });
+        return !!checkUser 
     } catch (error) {
-      res.status(500).json({ message: "Lỗi khi xóa người dùng", error });
+      res.status(500).json({ message: "Người dùng đã tồn tại", error });
     }
 }
 
   // Tạo user mới
   export const createUser = async (req, res) => {
-    const {name, email, phone, password} = req.body
+    const dataCreate = req.body
+    const exist = await checkUserExist(dataCreate.email)
     try {
-      if(!checkUserExist(email)){
+        if(exist){
+        return  res.status(302).json({message:"Người dùng này đã tồn tại"})
+        }
       // kiểm tra input
-      if (!name || !email || !password || !phone) {
-      return res.status(400).json({ message: "Thiếu thông tin bắt buộc" });
+      if (!dataCreate.email || !dataCreate.password) {
+        return res.status(400).json({ message: "Thiếu thông tin bắt buộc" });
       }
-      const hashPassword = await bcrypt.hash(password,10)
+    console.log("exist",exist);
+     dataCreate.password = await bcrypt.hash(dataCreate.password,10)
+    console.log("dataCreate.password",dataCreate.password);
+
       const user = await prisma.users.create({
-        data: { name, email, password:hashPassword, phone},
+        data: dataCreate
       });
-      res.status(201).json(user);
-    }
+      console.log("user",user);
+      res.status(200).json(user);
     } catch (error) {
       res.status(500).json({ message: "Lỗi khi tạo người dùng", error });
     }
@@ -63,24 +66,17 @@ const checkUserExist = async(email) => {
   // Cập nhật user
   export const updateUser = async (req, res) => {
     try {
-      // const id = parseInt(req.params.id);
       const id = req.params.id;
-      const { name, email, password} = req.body;
+      const dataUpdate = req.body;
       
-    // data động (chỉ chứa các field có giá trị thật)
-    const data = {};
-    if (name !== undefined) data.name = name;
-    if (email !== undefined) data.email = email;
-    if (password !== undefined) data.password = password;
-
-      if (Object.keys(data).length === 0) {
+      if (Object.keys(dataUpdate).length === 0) {
         return res.status(400).json({ message: "Không có dữ liệu để cập nhật" });
       }
-      const user = await prisma.users.update({
+      const updateUser = await prisma.users.update({
         where: { idUser:id },
-        data
+        data: dataUpdate
       });
-      res.json(user);
+      res.json(updateUser);
     } catch (error) {
       res.status(500).json({ message: "Lỗi khi cập nhật người dùng ne:", error });
     }

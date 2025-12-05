@@ -65,10 +65,6 @@ export const signIn= async (req, res) => {
   };
 
   const checkUserExist = async(email) => {
-      try {
        const checkUser = await prisma.users.findUnique({ where: { email:email } });
         return !!checkUser 
-      } catch (error) {
-        return res.status(500).json({ message: "Lỗi khi xóa người dùng", error });
-      }
   }

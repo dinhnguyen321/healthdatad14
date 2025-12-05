@@ -205,7 +205,7 @@ function UserManager() {
      ):("")
  }
  {inForPopup.title === "detail" || inForPopup.title === "edit" || inForPopup.title === "add" && showPopup ? (
-     <HandlerUser data={dataUser} setInForPopup={setInForPopup} setOpen={setShowPopup} inForPopup={inForPopup}/>
+     <HandlerUser resetData={getAllUser} data={dataUser} setInForPopup={setInForPopup} setOpen={setShowPopup} inForPopup={inForPopup}/>
  ):""}
  {inForPopup.title === "delete" && showPopup ? (
      <DeleteUser deleteUser={deleteUser} close={setShowPopup} setInForPopup={setInForPopup}/>
