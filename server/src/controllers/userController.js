@@ -6,8 +6,50 @@ import {PrismaClient} from "@prisma/client";
 // Lấy danh sách user
 export const getAllUsers = async (req, res) => {
   try {
-      const users = await prisma.users.findMany();
-      res.json(users);
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10
+
+    const skip = (page - 1) * limit
+      const users = await prisma.users.findMany(
+        {
+          skip:skip,
+          take:limit,
+          orderBy: { create_at: "desc" },
+          select:{
+          address:true,       
+          birth_day:true,  
+          birth_place:true,
+          blood_type:true,
+          create_at:true,
+          department:true,
+          education_level:true,
+          email:true,
+          ethnicity:true,
+          hometown:true,
+          idUser:true,
+          name:true,
+          national_id:true,
+          national_place:true,
+          phone:true,
+          position:true,
+          rank:true,
+          religion:true,
+          role:true,     
+          ward:true, 
+      }});
+      // res.json(users);
+
+          // Đếm tổng user
+      const total = await prisma.users.count();
+      res.json({
+        users,
+        pagination: {
+          total,
+          page,
+          limit,
+          totalPages: Math.ceil(total / limit)
+        }
+      });
     } catch (error) {
       res.status(500).json({
         message: "Lỗi khi lấy danh sách người dùng",
@@ -97,23 +139,29 @@ const checkUserExist = async(email) => {
     }
   };
 
+  // search user
   export const searchUser = async (req, res) =>{
     const { name, phone } = req.query;
-    console.log("name, phone",name, phone);
-    
-  try {
-    if ((!name || name.trim() === "") && (!phone || phone.trim() === "")) {
-      return res.status(400).json({ message: "Thiếu keyword tìm kiếm" });
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10
+
+    const skip = (page - 1) * limit
+    // Điều kiện động
+    const conditions = [];  
+    if (name) {
+      conditions.push({ name: { contains: name, mode: "insensitive" } });
     }
 
+    if (phone) {
+      conditions.push({ phone: { contains: phone, mode: "insensitive" } });
+    }
+    const where = conditions.length > 0 ? { AND: conditions } : {};
+  try {
     const users = await prisma.users.findMany({
-      where: {
-        AND: [
-          name ? { name: { contains: name, mode: "insensitive" }} : {},
-         phone ? { phone: { contains: phone, mode: "insensitive" }}: {},
-        ],
-      },
-      take: 50, // limit lại để tránh quá tải
+      where:where,
+      skip:skip,
+      take:limit,
+      orderBy: { create_at: "desc" },
       select:{
         address:true,       
         birth_day:true,  
@@ -137,11 +185,20 @@ const checkUserExist = async(email) => {
         ward:true, 
       }
     });
-    console.log("users search",users);
-    
-    return res.status(200).json(users);
+     const total = await prisma.users.count({ where });
+
+    res.json({
+      users,
+      pagination: {
+        total,
+        totalPages: Math.ceil(total / limit),
+        page,
+        limit,
+      },
+    });
+
   } catch (error) {
     console.error("Search error:", error);
-    return res.status(500).json({ message: "Lỗi tìm kiếm", error });
+    return res.status(500).json({ message: "Lỗi tìm kiếm: ", error });
   }
   }

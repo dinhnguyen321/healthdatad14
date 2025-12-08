@@ -33,6 +33,7 @@ import {PrismaClient} from "@prisma/client";
 export const signIn= async (req, res) => {
   try {
     const {email, password} = req.body 
+    
     if(!email && !password){
       return res.status(400).json({ message: "Thiếu email hoặc mật khẩu" });
     }

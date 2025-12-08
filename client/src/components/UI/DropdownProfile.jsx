@@ -5,7 +5,7 @@ function DropdownProfile({items}) {
     const [show, setShow] = useState(false)
     const nodeRef = useRef(null);
     return (
-        <div className='relative'>
+        <div className='relative z-50'>
              <button 
              className='bg-gray-400 h-10 w-10 p-1 rounded-full hover:bg-amber-50'
              onClick={()=> setShow(!show)}

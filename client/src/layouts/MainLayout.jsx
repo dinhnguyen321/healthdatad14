@@ -11,7 +11,7 @@ function MainLayout({profileUser}) {
             <div className='bg-gray-200 relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden'>
             <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} profileUser={profileUser}/>
                     <main className='sm:flex sm:justify-between sm:items-center mb-8 p-5'>
-                    <Outlet/>
+                    <Outlet />
                     </main>
         
             </div>

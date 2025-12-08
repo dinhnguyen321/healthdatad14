@@ -20,15 +20,15 @@ const Signin = () => {
             try {
               if(data.email || data.password){
                const signinUser = await axios.post("http://localhost:4000/account/signin",data)
-                localStorage.setItem("name", signinUser.data.name),
-                localStorage.setItem("idUser", signinUser.data.idUser),
-                localStorage.setItem("role", signinUser.data.role),
-                window.location.reload()
-                toast.success("Đăng nhập thành công")
+               localStorage.setItem("name", signinUser.data.name),
+                  localStorage.setItem("idUser", signinUser.data.idUser),
+                  localStorage.setItem("role", signinUser.data.role),
+                  window.location.reload()
+                toast.success(`Xin chào ${signinUser.data.name}`)
               }
             } catch (error) {
-              console.log("error singin: ",error);
-              toast.error("đăng nhập không thành công")
+              console.log("error singin: ",error.response.data.message);
+              toast.error(error.response.data.message)
             }
     }
     return (
