@@ -32,9 +32,9 @@ const Signin = () => {
             }
     }
     return (
-        <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8 dark:bg-gray-900">
+        <div className="flex h-screen flex-col justify-center px-6 py-12 lg:px-8 bg-gray-900">
         
-        <div className="sm:mx-auto sm:w-full sm:max-w-sm dark:bg-gray-800 p-6 space-y-4 md:space-y-6 sm:p-8 rounded-lg shadow">
+        <div className="sm:mx-auto sm:w-full sm:max-w-sm bg-gray-800x p-6 space-y-4 md:space-y-6 sm:p-8 rounded-lg shadow">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <img src={logo} alt="HealthDataD14" className="mx-auto h-20 w-auto rounded-full" />
           <p className="mt-5 bg-clip-text uppercase text-transparent bg-gradient-to-r from-indigo-500 to-purple-500 font-bold leading-tight tracking-tight text-lg text-center lg:text-xl">Đăng Nhập Tài Khoản</p>
@@ -62,8 +62,13 @@ const Signin = () => {
             </div>
         
             <div>
-              <button onClick={signIn} type="button" className="flex w-full justify-center rounded-md bg-indigo-500 px-3 py-1.5 text-sm/6 font-semibold text-white hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">Đăng nhập</button>
+              <button 
+              onClick={signIn} 
+              type="button" 
+              className="flex w-full justify-center rounded-md bg-indigo-500 px-3 py-1.5 text-sm/6 font-semibold text-white hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">
+                Đăng nhập</button>
             </div>
+
           </form>
           <ToastContainer
               position="top-right"

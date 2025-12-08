@@ -71,11 +71,15 @@ function HandlerUser({setOpen,setInForPopup,inForPopup,resetData}) {
         
          await axios.post("http://localhost:4000/api/users",dataRegister)
         .then(res =>{
-            // return res.data
-            // if(res.data){
-            // toast.success("Đăng ký thành công!");
+            if(res.status === 200){
+              toast.success("Đăng ký thành công!");
+               setInForPopup({
+                title:""
+              }),
+              resetData()
+              setOpen(false)
                 console.log("res", res.data, res.status);
-            // }
+            }
           })
            .catch(error =>{
             console.log("error: ", error);

@@ -6,6 +6,6 @@
     ],
     "postman.settings.dotenv-detection-notification-visibility": false,
     "terminal.integrated.env.windows": {
-        "PATH": "E:\\nodejs;E:\\Git\\bin;E:\\Git\\cmd;${env:PATH}"
+        "PATH": "G:\\nodejs;G:\\Git\\bin;G:\\Git\\cmd;${env:PATH}"
     }
 }

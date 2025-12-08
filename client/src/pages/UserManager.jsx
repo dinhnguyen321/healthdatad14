@@ -3,55 +3,12 @@ import HandlerUser from '../components/UI/HandlerUser';
 import DeleteUser from '../components/UI/DeleteUser';
 import InputSearch from '../components/UI/inputSearch';
 import axios from 'axios';
-// const data = [
-//     {
-//         id:1,
-//         name:"Trần Đinh Nguyễn",
-//         rank:"Thượng Sỹ",
-//             position:"pbt",
-//             department:"bTT",
-//             phone:"0829957878",
-//             email:"tdinhnguyen279@gmail.com"
-//     },
-//     {
-//         id:2,
-//         name:"Trần Đinh Nguyễn",
-//         rank:"Thượng Sỹ",
-//             position:"pbt",
-//             department:"bTT",
-//             phone:"0829957878",
-//             email:"tdinhnguyen279@gmail.com"
-//     },
-//     {
-//         id:3,
-//         name:"Trần Đinh Nguyễn",
-//         rank:"Thượng Sỹ",
-//             position:"pbt",
-//             department:"bTT",
-//             phone:"0829957878",
-//             email:"tdinhnguyen279@gmail.com"
-//     },
-//     {
-//         id:4,
-//         name:"Trần Đinh Nguyễn",
-//         rank:"Thượng Sỹ",
-//             position:"pbt",
-//             department:"bTT",
-//             phone:"0829957878",
-//             email:"tdinhnguyen279@gmail.com"
-//     },
-//     {
-//         id:5,
-//         name:"Trần Đinh Nguyễn",
-//         rank:"Thượng Sỹ",
-//             position:"pbt",
-//             department:"bTT",
-//             phone:"0829957878",
-//             email:"tdinhnguyen279@gmail.com"
-//     }
 
-// ]
 function UserManager() {
+    const [keyword, setKeyword] = useState({
+        name:"",
+        phone:""
+    });
     const [showPopup,setShowPopup] = useState(false)
     const [inForPopup,setInForPopup] = useState({
         title:"",
@@ -84,7 +41,24 @@ function UserManager() {
                 
             }
     }
-
+    
+const handleSearch = async () => {
+    console.log(keyword.name,keyword.phone);
+    
+    try {
+      const res = await axios.get(
+        `http://localhost:4000/api/users/search`,{
+            params:{
+                name:keyword.name,
+                phone:keyword.phone,
+            }
+        }
+      );
+      setDataUser(res.data);
+    } catch (err) {
+      console.error("Search error:", err);
+    }
+  };
     return (
         <div className='mx-auto text-black'>
              <div className='flex justify-between items-center'>
@@ -94,7 +68,7 @@ function UserManager() {
 
                 {/* search */}
                 <div className='flex items-center mb-2 gap-x-4'>
-                  <InputSearch/>
+                  <InputSearch handleSearch={handleSearch} value={keyword} setKeyword={setKeyword}/>
                   {/* Thêm mới User */}
                 <button 
                 className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gray-900 text-gray-100 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-800 dark:hover:bg-white"

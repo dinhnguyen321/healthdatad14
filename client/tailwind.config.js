@@ -1,17 +1,20 @@
-export const theme = {
-    darkMode: 'class',   // <--- PHẢI CÓ
+/** @type {import('tailwindcss').Config} */
+export default {
+    darkMode: "class",   // <--- PHẢI CÓ
     content: [
       "./index.html",
-      "./src/**/*.{js,ts,jsx,tsx}",
+      "./src/**/*.{html,js,ts,jsx,tsx}",
     ],
-    extend: {
-        animation: {
-            'gradient-flow': 'gradient-animation 3s ease infinite',
-        },
-        // Thêm kích thước background lớn hơn để animation có chỗ di chuyển
-        backgroundSize: {
-            '300%': '300% 300%',
-        },
+    theme:{
+        extend: {
+            animation: {
+                'gradient-flow': 'gradient-animation 3s ease infinite',
+            },
+            // Thêm kích thước background lớn hơn để animation có chỗ di chuyển
+            backgroundSize: {
+                '300%': '300% 300%',
+            },
+        }
     },
+    plugins:[]
 };
-export const plugins = [];

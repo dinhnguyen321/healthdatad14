@@ -49,9 +49,13 @@ const checkUserExist = async(email) => {
       if (!dataCreate.email || !dataCreate.password) {
         return res.status(400).json({ message: "Thiếu thông tin bắt buộc" });
       }
-    console.log("exist",exist);
-     dataCreate.password = await bcrypt.hash(dataCreate.password,10)
-    console.log("dataCreate.password",dataCreate.password);
+      Object.keys(dataCreate).forEach((key) => {
+        if (dataCreate[key] === "") {
+          dataCreate[key] = null;
+        }
+      });
+
+      dataCreate.password = await bcrypt.hash(dataCreate.password,10)
 
       const user = await prisma.users.create({
         data: dataCreate
@@ -92,3 +96,52 @@ const checkUserExist = async(email) => {
       res.status(500).json({ message: "Lỗi khi xóa người dùng", error });
     }
   };
+
+  export const searchUser = async (req, res) =>{
+    const { name, phone } = req.query;
+    console.log("name, phone",name, phone);
+    
+  try {
+    if ((!name || name.trim() === "") && (!phone || phone.trim() === "")) {
+      return res.status(400).json({ message: "Thiếu keyword tìm kiếm" });
+    }
+
+    const users = await prisma.users.findMany({
+      where: {
+        AND: [
+          name ? { name: { contains: name, mode: "insensitive" }} : {},
+         phone ? { phone: { contains: phone, mode: "insensitive" }}: {},
+        ],
+      },
+      take: 50, // limit lại để tránh quá tải
+      select:{
+        address:true,       
+        birth_day:true,  
+        birth_place:true,
+        blood_type:true,
+        create_at:true,
+        department:true,
+        education_level:true,
+        email:true,
+        ethnicity:true,
+        hometown:true,
+        idUser:true,
+        name:true,
+        national_id:true,
+        national_place:true,
+        phone:true,
+        position:true,
+        rank:true,
+        religion:true,
+        role:true,     
+        ward:true, 
+      }
+    });
+    console.log("users search",users);
+    
+    return res.status(200).json(users);
+  } catch (error) {
+    console.error("Search error:", error);
+    return res.status(500).json({ message: "Lỗi tìm kiếm", error });
+  }
+  }
