@@ -23,7 +23,7 @@ function UserManager() {
     // Pagination
     const [page, setPage] = useState(1);
     const [dataUser,setDataUser] = useState([])
-
+    
     const getAllUser = async()=>{
         try {
             setIsLoading(true)
@@ -39,6 +39,7 @@ function UserManager() {
              setIsLoading(false);
         }
 }   
+
     useEffect(()=>{       
         getAllUser()
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -56,12 +57,7 @@ function UserManager() {
             }
     }
     
-// const searchTerm = searchParams.get("query");
-// const pageNumber = searchParams.get("page");
-
 const handleSearch = async () => {
-    // const newSearchParams = new URLSearchParams(searchParams)
-    // newSearchParams.set("query", searchTerm)
     try {
       const res = await axios.get(
         `http://localhost:4000/api/users/search`,{
@@ -124,16 +120,23 @@ const handleSearch = async () => {
                     {
                     isLoading ? <SkeletonTable/> :(
                     <tbody>
-                    {dataUser.users.map((item,key)=>(
+                    {dataUser.users.length === 0 ? (
+                        <tr>
+                        <td colSpan={8} className='text-center font-bold py-4'>
+                            Tên người dùng không có trong danh sách 
+                        </td>
+                        </tr>  
+                        ) : 
+                        dataUser.users.map((item,key)=>(
                         <tr key={key}>
-                        <td className='border px-4 py-2'>{key + 1}</td>
-                        <td className='border px-4 py-2'>{item.name}</td>
-                        <td className='border px-4 py-2'>{item.rank}</td>
-                        <td className='border px-4 py-2'>{item.position}</td>
-                        <td className='border px-4 py-2'>{item.department}</td>
-                        <td className='border px-4 py-2'>{item.phone}</td>
-                        <td className='border px-4 py-2'>{item.email}</td>
-                        <td className='border px-4 py-2'>
+                        <td className='border text-center px-4 py-2'>{key + 1}</td>
+                        <td className='border text-center px-4 py-2'>{item.name}</td>
+                        <td className='border text-center px-4 py-2'>{item.rank}</td>
+                        <td className='border text-center px-4 py-2'>{item.position}</td>
+                        <td className='border text-center px-4 py-2'>{item.department}</td>
+                        <td className='border text-center px-4 py-2'>{item.phone}</td>
+                        <td className='border text-center px-4 py-2'>{item.email}</td>
+                        <td className='border text-center px-4 py-2'>
                         <div>
                             { role === "user" ? "" : ( 
                                 <>
@@ -150,7 +153,7 @@ const handleSearch = async () => {
                                 viewBox="-1 -3 24 24" 
                                 version="1.1" 
                                 xmlns="http://www.w3.org/2000/svg" 
-                                xmlns:xlink="http://www.w3.org/1999/xlink"fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>edit [#1479]</title> <desc>Created with Sketch.</desc> <defs> </defs> <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"> <g id="Dribbble-Light-Preview" transform="translate(-99.000000, -400.000000)" 
+                                xmlnsXlink="http://www.w3.org/1999/xlink"fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>edit [#1479]</title> <desc>Created with Sketch.</desc> <defs> </defs> <g id="Page-1" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd"> <g id="Dribbble-Light-Preview" transform="translate(-99.000000, -400.000000)" 
                                 fill="#ffffff"> <g id="icons" transform="translate(56.000000, 160.000000)"> <path d="M61.9,258.010643 L45.1,258.010643 L45.1,242.095788 L53.5,242.095788 L53.5,240.106431 L43,240.106431 L43,260 L64,260 L64,250.053215 L61.9,250.053215 L61.9,258.010643 Z M49.3,249.949769 L59.63095,240 L64,244.114985 L53.3341,254.031929 L49.3,254.031929 L49.3,249.949769 Z" id="edit-[#1479]"> </path> </g> </g> </g> </g></svg>
                             </button>
                         
@@ -164,13 +167,13 @@ const handleSearch = async () => {
                                 )}
                                 className='text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-2 py-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-red-800 dark:focus:ring-blue-800' title='Xóa'>
                                 <svg className='h-4 w-4 lg:h-6 lg:w-6' viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                                <g id="SVGRepo_iconCarrier"> <path d="M10 12V17" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
+                                <g id="SVGRepo_iconCarrier"> <path d="M10 12V17" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                 </path>
-                                <path d="M14 12V17" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> 
-                                <path d="M4 7H20" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                                <path d="M6 10V18C6 19.6569 7.34315 21 9 21H15C16.6569 21 18 19.6569 18 18V10" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> 
-                                <path d="M9 5C9 3.89543 9.89543 3 11 3H13C14.1046 3 15 3.89543 15 5V7H9V5Z" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> 
+                                <path d="M14 12V17" stroke="#ffffff" stroke-width="2" stroke-linecap="round" strokeLinejoin="round"></path> 
+                                <path d="M4 7H20" stroke="#ffffff" stroke-width="2" strokeLinecap="round" strokeLinejoin="round"></path>
+                                <path d="M6 10V18C6 19.6569 7.34315 21 9 21H15C16.6569 21 18 19.6569 18 18V10" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path> 
+                                <path d="M9 5C9 3.89543 9.89543 3 11 3H13C14.1046 3 15 3.89543 15 5V7H9V5Z" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path> 
                                 </g>
                                 </svg>
                             </button>
@@ -201,7 +204,7 @@ const handleSearch = async () => {
                 )}
                 </table>
                 <div>
-                    <Pagination pagination={dataUser.pagination} setPage={setPage}/>
+                    <Pagination pagination={dataUser.pagination} setPage={setPage} page={page}/>
                 </div>
         </div>
  {

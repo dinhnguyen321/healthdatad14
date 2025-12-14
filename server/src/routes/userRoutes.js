@@ -1,15 +1,17 @@
 import express from "express";
 import {
 createUser,getAllUsers,updateUser,deleteUser,
-getUserById,searchUser
+getUserById,searchUser,createMedicalProfile,updateMedicalProfile
 } from "../controllers/userController.js"
 
 const router = express.Router()
 
 router.get('/',getAllUsers)
 router.get('/search',searchUser)
-router.get('/:id',getUserById)
+router.get('/:userId',getUserById)
 router.post('/',createUser)
+router.post('/:userId/medical-profile',createMedicalProfile ) // tạo mới hồ sơ
+router.put('/:userId/medical-profile',updateMedicalProfile ) // tạo mới hồ sơ
 router.put('/:id',updateUser)
 router.delete('/:id',deleteUser)
 

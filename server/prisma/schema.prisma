@@ -1,0 +1,60 @@
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  idUser          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name            String   
+  email           String    @unique
+  phone           String?   @unique
+  address         String?  
+  password        String   
+  birth_day       DateTime? @db.Date
+  education_level String?  
+  hometown        String?  
+  cccd_id         Int?
+  cccd_place      String?  
+  ethnicity       String?  
+  religion        String? 
+  enlistment_date DateTime?
+
+  rank            String?  
+  position        String?  
+  department      String?  
+  role            String? 
+
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+
+  medicalProfile MedicalProfile?
+
+  @@map("users")
+}
+
+ model MedicalProfile {
+  id                    String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId                String   @unique @db.Uuid
+
+  health_insurance_code String?
+  height_cm             Float?
+  weight_kg             Float?
+  bmi                   Float?
+
+  medical_history       String? @db.Text
+  current_disease       String? @db.Text
+  treatment_plan        String? @db.Text
+  blood_type            String? @db.Text 
+
+  created_at            DateTime @default(now())
+  updated_at            DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [idUser], onDelete: Cascade)
+  @@map("medical_profiles")
+}

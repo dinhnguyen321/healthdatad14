@@ -1,12 +1,14 @@
 import { PrismaClient } from "@prisma/client";
-const prisma = new PrismaClient();
-export async function testConnection() {
+
+export const testConnection = async() => {
+  const prisma = new PrismaClient();
   try {
     await prisma.$connect();
     console.log("✅ Kết nối Neon thành công!");
   } catch (error) {
-    console.error("❌ Lỗi kết nối:", error);
-  } finally {
+    console.error("❌ Không thể kết nối database:", error.message);
+  } 
+  finally {
     await prisma.$disconnect();
   }
 }

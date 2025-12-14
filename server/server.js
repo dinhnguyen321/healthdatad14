@@ -3,9 +3,9 @@ import cors from 'cors';
 import session from 'express-session';
 import dotenv from 'dotenv';
 // import authUser from'./routes/authRoutes'
-import userRouters from "./routes/userRoutes.js"
-import LoginRouters from "./routes/loginRoutes.js"
-import { testConnection } from './routes/testConnection.js';
+import userRouters from "./src/routes/userRoutes.js"
+import LoginRouters from "./src/routes/loginRoutes.js"
+import { testConnection } from './src/routes/testConnection.js';
 dotenv.config();
 
 

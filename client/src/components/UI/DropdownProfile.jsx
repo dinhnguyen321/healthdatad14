@@ -27,7 +27,7 @@ function DropdownProfile({items}) {
                         <button
                          onClick={item.onClick}
                          key={idx} className='text-white border-gray-300 rounded-xl overflow-hidden py-2 px-4 bg-white flex items-center justify-center space-x-2 border-2'>
-                            <a className='hover:text-white' href={item.href}>{item.name}</a>
+                            <a className='hover:text-white text-black' href={item.href}>{item.name}</a>
                         </button>   
                     ))}
                 </div>

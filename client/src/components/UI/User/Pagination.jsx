@@ -19,7 +19,7 @@ export default function Pagination({pagination, setPage }) {
       </div>
       <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
         <div>
-          <p className="text-sm text-gray-300">
+          <p className="text-sm text-gray-800">
             Hiển thị trang <span className="font-medium">1</span> / <span className="font-medium">{pagination ? pagination.totalPages : ""}</span> trong số {' '}
             <span className="font-medium">{pagination ? pagination.total : ""}</span> quân nhân
           </p>
@@ -27,11 +27,12 @@ export default function Pagination({pagination, setPage }) {
         <div>
           <nav aria-label="Pagination" className="isolate inline-flex -space-x-px rounded-md">
             <a
+            onClick={()=>setPage(prev => Math.max(prev - 1,1))} 
               href="#"
               className="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 inset-ring inset-ring-gray-700 hover:bg-white/5 focus:z-20 focus:outline-offset-0"
             >
               <span className="sr-only">Previous</span>
-              <ChevronLeftIcon onClick={()=>setPage(prev => Math.max(prev - 1,1))} aria-hidden="true" className="size-5" />
+              <ChevronLeftIcon aria-hidden="true" className="size-5" />
             </a>
             {/* Current: "z-10 text-white focus-visible:outline-2 focus-visible:outline-offset-2 bg-indigo-500 focus-visible:outline-indigo-500", Default: "inset-ring focus:outline-offset-0 text-gray-200 inset-ring-gray-700 hover:bg-white/5" */}
             <a
@@ -48,16 +49,19 @@ export default function Pagination({pagination, setPage }) {
            
             <a
               href="#"
-              className="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-200 inset-ring inset-ring-gray-700 hover:bg-white/5 focus:z-20 focus:outline-offset-0"
+              className="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-800 inset-ring inset-ring-gray-700 hover:bg-white/5 focus:z-20 focus:outline-offset-0"
             >
               {pagination ? pagination.totalPages : ""}
             </a>
             <a
+              onClick={()=>setPage(prev => prev + 1)} 
               href="#"
-              className="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 inset-ring inset-ring-gray-700 hover:bg-white/5 focus:z-20 focus:outline-offset-0"
+              className={`relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 inset-ring inset-ring-gray-700 hover:bg-white/5 focus:z-20 focus:outline-offset-0
+                `}
+                // ${page ===pagination.totalPages}
             >
               <span className="sr-only">Next</span>
-              <ChevronRightIcon onClick={()=>setPage(prev => prev + 1)} aria-hidden="true" className="size-5" />
+              <ChevronRightIcon aria-hidden="true" className="size-5" />
             </a>
           </nav>
         </div>

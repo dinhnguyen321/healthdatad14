@@ -7,6 +7,7 @@ import Dashboard from "./pages/Dashboard";
 import MainLayout from "./layouts/MainLayout";
 import UserManager from "./pages/UserManager";
 import Signin from "./components/AuthLayout/Signin";
+import HandlerUser from "./components/UI/HandlerUser.jsx";
 import {AuthGuard,IsLoggedIn} from "./layouts/ProtectedRoute.jsx";
 import SignUp from "./components/AuthLayout/SignUp.jsx";
 function App() {
@@ -42,7 +43,7 @@ return (
             <Route element={<MainLayout profileUser={profileUser}/>}>
                 <Route path="/" element={<Navigate to="/dashboard" replace/>}/>
                 <Route path="/dashboard" element={<Dashboard/>}/>
-                <Route path="/user-manager" element={<UserManager/>}/>
+                <Route path="/user-manager" element={<UserManager/>} />
             </Route> 
        </Route> 
        

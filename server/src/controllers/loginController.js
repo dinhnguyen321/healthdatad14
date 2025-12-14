@@ -20,8 +20,14 @@ import {PrismaClient} from "@prisma/client";
 
       const hashPassword = await bcrypt.hash(password,10)
       
-      const user = await prisma.users.create({
+      const user = await prisma.user.create({
         data: {email, password:hashPassword, role, name},
+        select:{
+           idUser:true,
+          name:true,
+          email:true,
+          role:true
+        }
       });
       return res.status(200).json(user);
     }
@@ -38,7 +44,7 @@ export const signIn= async (req, res) => {
       return res.status(400).json({ message: "Thiếu email hoặc mật khẩu" });
     }
   
-        const users = await prisma.users.findUnique({
+        const users = await prisma.user.findUnique({
           where:{ email:email}
         });
 
@@ -66,6 +72,6 @@ export const signIn= async (req, res) => {
   };
 
   const checkUserExist = async(email) => {
-       const checkUser = await prisma.users.findUnique({ where: { email:email } });
+       const checkUser = await prisma.user.findUnique({ where: { email:email } });
         return !!checkUser 
   }
