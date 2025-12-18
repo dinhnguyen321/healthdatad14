@@ -1,7 +1,6 @@
 
 import bcrypt from "bcryptjs"
-import {PrismaClient} from "@prisma/client";
- const prisma = new PrismaClient();
+import {prisma} from "../models/prismaClient.js";
 
 // Lấy danh sách user
 export const getAllUsers = async (req, res) => {
@@ -26,10 +25,7 @@ export const getAllUsers = async (req, res) => {
           role:true,     
       }});
       // Đếm tổng user
-      console.log("users",users);
-      
       const total = await prisma.user.count();
-      console.log("total",total);
       res.json({
         users,
         pagination: {
@@ -46,7 +42,21 @@ export const getAllUsers = async (req, res) => {
       });
     }
   };
-  
+  const defaultMedicalProfile = {
+  health_insurance_code: "",
+  height_cm: "",
+  weight_kg: "",
+  bmi: "",
+  medical_history: "",
+  current_disease: "",
+  treatment_plan: "",
+  blood_type: "",
+  id: null,
+  userId: null,
+  created_at: null,
+  updated_at: null,
+};
+
  export const getUserById = async(req,res)=> {
     const userId = req.params.userId;
       
@@ -60,18 +70,22 @@ export const getAllUsers = async (req, res) => {
           phone: true,
           role: true,
           birth_day:true,
+          address:true,
+          rank:true,
+          position:true,
+          department:true,
+          enlistment_date:true,
           medicalProfile:true
-        },
-        // include:{
-        //   medicalProfile:true
-        // }
+        }
       });
-      console.log("user",user);
       
       if (!user) {
       return res.status(404).json({ message: "User không tồn tại" });
       }
-      return res.json(user); 
+      return res.json({
+        ...user,
+        medicalProfile: user.medicalProfile ?? defaultMedicalProfile
+      }); 
     } catch (error) {
       return res.status(500).json({
         message: "Lỗi khi lấy chi tiết người dùng",
@@ -108,7 +122,6 @@ const checkUserExist = async(email) => {
       const user = await prisma.user.create({
         data: dataCreate
       });
-      console.log("user",user);
       res.status(200).json(user);
     } catch (error) {
       res.status(500).json({ message: "Lỗi khi tạo người dùng", error });
@@ -131,20 +144,17 @@ export const createMedicalProfile = async (req, res) => {
         message: "Hồ sơ y tế đã tồn tại, hãy dùng PUT để cập nhật",
       });
     }
-    console.log("diqua");
 
-    const bmi = calculateBMI(data.height_cm, data.weight_kg);
-    console.log("bmi",bmi);
+    data.bmi = calculateBMI(data.height_cm, data.weight_kg);
     
     const profile = await prisma.medicalProfile.create({
       data: {
         userId:userId,
         ...data,
-        bmi,
       },
     });
 
-    res.status(201).json(profile);
+    res.status(200).json(profile);
   } catch (error) {
     res.status(500).json({ message: "Lỗi tạo hồ sơ y tế", error });
   }
@@ -153,14 +163,14 @@ export const createMedicalProfile = async (req, res) => {
 // Cập nhật hồ sơ y tế
 export const updateMedicalProfile = async (req, res) => {
   const { userId } = req.params;
-  const data = req.body;
-  console.log("dataa",data);
-  
+  const dataUpdate = req.body;
   try {
+    if (Object.keys(dataUpdate).length === 0) {
+        return res.status(400).json({ message: "Không có dữ liệu để cập nhật" });
+    }
     const oldProfile = await prisma.medicalProfile.findUnique({
       where: { userId:userId },
     });
-    console.log("oldProfile",oldProfile);
     
     if (!oldProfile) {
       return res.status(404).json({
@@ -168,20 +178,17 @@ export const updateMedicalProfile = async (req, res) => {
       });
     }
 
-    const height = data.height_cm ?? oldProfile.height_cm;
-    const weight = data.weight_kg ?? oldProfile.weight_kg;
+    const height = dataUpdate.height_cm ?? oldProfile.height_cm;
+    const weight = dataUpdate.weight_kg ?? oldProfile.weight_kg;
 
-    const bmi = calculateBMI(height, weight);
+    dataUpdate.bmi = calculateBMI(height, weight);
 
-    const updated = await prisma.medicalProfile.update({
+    const updateMedicalProfile = await prisma.medicalProfile.update({
       where: { userId:userId },
-      data: {
-        ...data,
-        bmi,
-      },
+      data: dataUpdate
     });
 
-    res.json(updated);
+    res.json(updateMedicalProfile);
   } catch (error) {
     res.status(500).json({
       message: "Lỗi cập nhật hồ sơ y tế",
@@ -222,27 +229,37 @@ export const updateMedicalProfile = async (req, res) => {
 
   // search user
   export const searchUser = async (req, res) =>{
-    const { name, phone } = req.query;
+    const { name, health_insurance_code } = req.query;
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10
 
     const skip = (page - 1) * limit
-    // Điều kiện động
-    const conditions = [];  
-    if (name) {
-      conditions.push({ name: { contains: name, mode: "insensitive" } });
-    }
 
-    if (phone) {
-      conditions.push({ phone: { contains: phone, mode: "insensitive" } });
-    }
-    const where = conditions.length > 0 ? { AND: conditions } : {};
+    // Điều kiện động
+    const where = {
+    AND: [
+      name && {
+        name: { contains: name, mode: "insensitive" },
+      },
+
+      health_insurance_code && {
+        medicalProfile: {
+          is: {
+            health_insurance_code: {
+              contains: health_insurance_code,
+              mode: "insensitive",
+            },
+          },
+        },
+      },
+    ].filter(Boolean),
+  };
   try {
     const users = await prisma.user.findMany({
       where,
       skip:skip,
       take:limit,
-      orderBy: { create_at: "desc" },
+      orderBy: { created_at: "desc" },
       select:{
       idUser:true,
           name:true,
@@ -251,9 +268,10 @@ export const updateMedicalProfile = async (req, res) => {
           phone:true,
           position:true,
           rank:true,
+          medicalProfile:true
       }
     });
-     const total = await prisma.users.count({ where });
+     const total = await prisma.user.count({ where });
 
     res.json({
       users,

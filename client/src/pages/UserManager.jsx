@@ -13,7 +13,7 @@ function UserManager() {
     const [isLoading, setIsLoading] = useState(true);
     const [keyword, setKeyword] = useState({
         name:"",
-        phone:""
+        health_insurance_code:""
     });
     const [showPopup,setShowPopup] = useState(false)
     const [inForPopup,setInForPopup] = useState({
@@ -65,7 +65,7 @@ const handleSearch = async () => {
                 limit:10,
                 page,
                 name:keyword.name,
-                phone:keyword.phone,
+                health_insurance_code:keyword.health_insurance_code,
             }
         }
       );

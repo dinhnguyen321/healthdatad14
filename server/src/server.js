@@ -2,12 +2,10 @@ import express from 'express';
 import cors from 'cors';
 import session from 'express-session';
 import dotenv from 'dotenv';
-// import authUser from'./routes/authRoutes'
-import userRouters from "./src/routes/userRoutes.js"
-import LoginRouters from "./src/routes/loginRoutes.js"
-import { testConnection } from './src/routes/testConnection.js';
+import userRouters from "./routes/userRoutes.js"
+import LoginRouters from "./routes/loginRoutes.js"
+import { testConnection } from './routes/testConnection.js';
 dotenv.config();
-
 
 const app = express();
 app.use(express.json());
@@ -20,13 +18,6 @@ app.use(
   })
 );
 
-// const db = { users: new Map() };
-// const rpName = process.env.RP_NAME;
-// const rpID = process.env.RP_ID;
-// const origin = process.env.ORIGIN;
-
-// test cảm biến window hello
-// app.use('api/auth/',authUser)
 app.use("/api/users",userRouters)
 app.use("/account",LoginRouters)
 testConnection()

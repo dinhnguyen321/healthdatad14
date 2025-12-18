@@ -36,3 +36,14 @@ Thumbs.db
 
 # Others
 *.sw?
+
+# ===== ENV =====
+.env
+
+# ===== OS =====
+.DS_Store
+Thumbs.db
+
+# ===== IDE =====
+.vscode/
+.idea/

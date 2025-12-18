@@ -3,10 +3,19 @@
         "activecondition",
         "cccd",
         "chartjs",
-        "simplewebauthn"
+        "diseaseplan",
+        "faceapi",
+        "Mobilenetv",
+        "resgister",
+        "simplewebauthn",
+        "tfjs",
+        "vladmandic"
     ],
     "postman.settings.dotenv-detection-notification-visibility": false,
     "terminal.integrated.env.windows": {
         "PATH": "G:\\nodejs;G:\\Git\\bin;G:\\Git\\cmd;${env:PATH}"
+    },
+    "cSpell.enabledFileTypes": {
+        "javascriptreact": false
     }
 }

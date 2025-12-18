@@ -10,8 +10,8 @@ router.get('/',getAllUsers)
 router.get('/search',searchUser)
 router.get('/:userId',getUserById)
 router.post('/',createUser)
-router.post('/:userId/medical-profile',createMedicalProfile ) // tạo mới hồ sơ
-router.put('/:userId/medical-profile',updateMedicalProfile ) // tạo mới hồ sơ
+router.post('/:userId/medical-profile',createMedicalProfile ) 
+router.put('/:userId/medical-profile',updateMedicalProfile ) 
 router.put('/:id',updateUser)
 router.delete('/:id',deleteUser)
 

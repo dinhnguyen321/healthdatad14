@@ -1,11 +1,9 @@
 import bcrypt from "bcryptjs"
-import {PrismaClient} from "@prisma/client";
- const prisma = new PrismaClient();
+import {prisma} from "../models/prismaClient.js";
 
   // Tạo user mới
   export const register = async (req, res) => {
     const {email, password, role, name} = req.body
-    console.log("data regis", email, password, role, name);
     
     const exist = await checkUserExist(email)
     try {
@@ -21,9 +19,17 @@ import {PrismaClient} from "@prisma/client";
       const hashPassword = await bcrypt.hash(password,10)
       
       const user = await prisma.user.create({
-        data: {email, password:hashPassword, role, name},
+        data: {
+          email, 
+          password:hashPassword, 
+          role, 
+          name,
+          medicalProfile: {
+          create: {}, 
+          } 
+        },
         select:{
-           idUser:true,
+          idUser:true,
           name:true,
           email:true,
           role:true
