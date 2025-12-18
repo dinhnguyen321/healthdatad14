@@ -8,6 +8,7 @@ import { testConnection } from './routes/testConnection.js';
 dotenv.config();
 
 const app = express();
+const PORT = process.env.PORT || 4000;
 const allowedOrigins = [process.env.ORIGIN, process.env.VERCEL_URL];
 app.use(express.json());
 app.use(cors({
@@ -35,6 +36,6 @@ app.use("/api/users",userRouters)
 app.use("/account",LoginRouters)
 testConnection()
 
-app.listen(process.env.PORT, () =>
-  console.log(`✅ Server running at http://localhost:${process.env.PORT}`)
+app.listen(PORT, () =>
+  console.log(`✅ Server running at http://localhost:${PORT}`)
 );
