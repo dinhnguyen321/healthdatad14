@@ -11,19 +11,19 @@ function Dashboard() {
         email:"",
         phone:""
     })
+    const API_URL = import.meta.env.VITE_API_URL
     useEffect(()=>{
         if(profile){
             const fetchUser = async()=>{
-                await axios.get("http://localhost:4000/api/users")
+                await axios.get(`${API_URL}/api/users`)
                 .then((res)=> {
                     setProfile("user",res.data[0]);
-                     toast.success(`Xin chào ${profile.name}`);
+                     toast.success(`Xin chào đồng chí`);
                     })
                 .catch((error)=>{
                     console.log("error: ",error);
                     toast.error(`Đăng nhập thất bại`)
                 })
-
             }
             fetchUser()
         }

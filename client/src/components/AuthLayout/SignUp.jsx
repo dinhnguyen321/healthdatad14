@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import logo from "../../assets/logo.jpg"
 import axios from 'axios';
 const SignUp = () => {
+    const API_URL = import.meta.env.VITE_API_URL
     const [data,setData] = useState({})
     const [textValid,setTextValid] = useState({
         textEmail:"",
@@ -74,7 +75,7 @@ const SignUp = () => {
           
             try {
                 if(validateForm()){
-                const res = await axios.post("http://localhost:4000/account/register",dataRegister)
+                const res = await axios.post(`${API_URL}/account/register`,dataRegister)
                 if(res.data){
                     setInterval(()=>{
                         window.location.href = "/account/signin"

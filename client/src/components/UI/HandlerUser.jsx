@@ -6,7 +6,7 @@ import {Bounce, ToastContainer, toast} from "react-toastify"
 import { PlayPauseIcon } from '@heroicons/react/20/solid';
 
 function HandlerUser({setOpen,setInForPopup,inForPopup,resetData}) {
-  
+  const API_URL = import.meta.env.VITE_API_URL
   const [dataUser, setDataUser] = useState({
       idUser:"",  
       name: "",
@@ -77,25 +77,47 @@ function HandlerUser({setOpen,setInForPopup,inForPopup,resetData}) {
         treatment_plan:dataUser.medicalProfile.treatment_plan,
         blood_type :dataUser.medicalProfile.blood_type
       }
-      if(!dataRegister.name && !dataRegister.phone && !dataRegister.email && !dataUser.password) return
-       const resgisterUser =  await axios.post("http://localhost:4000/api/users",dataRegister)
+      if(!dataRegister.name || !dataRegister.email || !dataUser.password) {
+        toast.dismiss(loadingToast);
+        toast.warning(`Chưa điền đủ thông tin bắt buộc`,{id: loadingToast});
+        return
+        } 
+      
+       const resgisterUser = await axios.post(`${API_URL}/api/users`,dataRegister)
+       .then((res)=> {
+        toast.success(`Đăng ký người dùng thành công. ${res.status} `,{id: loadingToast});
+        toast.dismiss(loadingToast);
+      })
+       .catch((error)=>{
+        toast.error(`Đăng ký người không thành công. ${error.response.data.message} `,{id: loadingToast});
+        toast.dismiss(loadingToast);
+        console.log("error", error);
+       })
+      
+          // toast.warning(`Đăng ký không thành công, ${res.status} `,{id: loadingToast});
+          // setTimeout(()=> {
+          //     toast.dismiss(loadingToast);
+          // },2000)} 
+
       if(resgisterUser.status === 200){
-        await axios.post(`http://localhost:4000/api/users/${resgisterUser.data.idUser}/medical-profile`,dataMedicalProfileUpdate)  
+        await axios.post(`${API_URL}/api/users/${resgisterUser.data.idUser}/medical-profile`,dataMedicalProfileUpdate)  
         .then((res) => {
           if(res.status === 200){
-              toast.success("Đăng ký thành công!",{id: loadingToast});
-              toast.dismiss(loadingToast);
-              setInForPopup({
-                title:""
-              }),
-              resetData()
-              setOpen(false)
-          } 
+              toast.success("Đăng ký hồ sơ thành công!",{id: loadingToast});
+              setTimeout(()=> {
+                toast.dismiss(loadingToast);
+                setInForPopup({
+                  title:""
+                }),
+                resetData()
+                setOpen(false)
+              },1500)
+          }
         })
         .catch((error)=>{
-          toast.error("Lỗi đăng ký người dùng: ",error, {id: loadingToast})
+          toast.error("Lỗi đăng ký hồ sơ người dùng: ",error, {id: loadingToast})
           toast.dismiss(loadingToast);
-          console.log("error đăng ký người dùng: ",error)
+          console.log("error đăng ký hồ sơ người dùng: ",error)
         })}
   }
     // cập nhật thông tin người dùng
@@ -124,8 +146,8 @@ const updateUser = async (id)=> {
   }
 
   try {
-    const request = await axios.put(`http://localhost:4000/api/users/${id}`,dataUserUpdate)
-    const requestMedicalProfile = await axios.put(`http://localhost:4000/api/users/${id}/medical-profile`,dataMedicalProfileUpdate)  
+    const request = await axios.put(`${API_URL}/api/users/${id}`,dataUserUpdate)
+    const requestMedicalProfile = await axios.put(`${API_URL}/api/users/${id}/medical-profile`,dataMedicalProfileUpdate)  
      
     const [response,responseMedicalProfile ]= await Promise.all([request,requestMedicalProfile])
     if(response.status && responseMedicalProfile.status === 200){
@@ -146,7 +168,7 @@ const updateUser = async (id)=> {
 }
 
     const getUserById =async() => {
-          const res = await axios.get(`http://localhost:4000/api/users/${inForPopup.idUser}`)
+          const res = await axios.get(`${API_URL}/api/users/${inForPopup.idUser}`)
           setDataUser(res.data)
           return
     }

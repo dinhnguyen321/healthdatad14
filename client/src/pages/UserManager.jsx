@@ -9,6 +9,7 @@ import { Bounce, toast,ToastContainer } from 'react-toastify';
 // import {useSearchParams} from 'react-router-dom'
 function UserManager() {
     const role = localStorage.getItem("role")
+    const API_URL = import.meta.env.VITE_API_URL
     // const [searchParams, setSearchParams] = useSearchParams()
     const [selectedIds ,setSelectedIds] = useState([]); 
     const [isLoading, setIsLoading] = useState(true);
@@ -25,15 +26,11 @@ function UserManager() {
     const [page, setPage] = useState(1);
     const [dataUser,setDataUser] = useState([])
     
-    useEffect(()=>{       
-        getAllUser()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[page])
-
+    
     const getAllUser = async()=>{
         try {
             setIsLoading(true)
-            await axios.get("http://localhost:4000/api/users",{
+            await axios.get(`${API_URL}/api/users`,{
                 params:{page, limit:10}
             })
             .then((res)=>{
@@ -41,20 +38,20 @@ function UserManager() {
             })
         } catch (error) {
                 console.log("error: ",error);
-        } finally{
-             setIsLoading(false);
-        }
+            } finally{
+                setIsLoading(false);
+            }
 }   
-    const handleSelectOne = (idUser) => {
-        setSelectedIds((prev)=> 
-            prev.includes(idUser) 
-            ? prev.filter((item) => item !== idUser) 
-            : [...prev, idUser]
+const handleSelectOne = (idUser) => {
+    setSelectedIds((prev)=> 
+        prev.includes(idUser) 
+    ? prev.filter((item) => item !== idUser) 
+    : [...prev, idUser]
         )
     }         
-     
+    
     const confirmDeleteUser = () =>{
-            if (selectedIds.length === 0) {
+        if (selectedIds.length === 0) {
                 toast.warning("Chưa chọn người dùng cần xóa!")
                 return
             };  
@@ -68,34 +65,34 @@ function UserManager() {
     const deleteUser  = async() => {
              const loadingToast = toast.loading('Đang xử lý xóa...'); 
              try {
-                if(selectedIds.length > 1){
-                    await axios.post(`http://localhost:4000/api/users/bulk-delete`,
+                 if(selectedIds.length > 1){
+                    await axios.post(`${API_URL}/api/users/bulk-delete`,
                      { ids: selectedIds}
                     )
                 } else {
-                    await axios.delete(`http://localhost:4000/api/users/${selectedIds[0]}`)
+                    await axios.delete(`${API_URL}/api/users/${selectedIds[0]}`)
                     .then((res)=>{
                         console.log(res.data);
                     }).catch((err)=>{
                         console.error("Lỗi xóa 1 người dùng:", err);
                     })
                 } 
-            toast.success('Đã xóa thành công!', {Id: loadingToast})
-            toast.dismiss(loadingToast);
-            setSelectedIds([])
-            getAllUser()
-             } catch (error) {
+                toast.success('Đã xóa thành công!', {Id: loadingToast})
+                toast.dismiss(loadingToast);
+                setSelectedIds([])
+                getAllUser()
+            } catch (error) {
                 console.error("Lỗi xóa người dùng:", error);
                 toast.error('Xóa thất bại!', { Id: loadingToast });
                 toast.dismiss(loadingToast);
             }
-         
+            
     }
     
 const handleSearch = async () => {
     try {
-      const res = await axios.get(
-        `http://localhost:4000/api/users/search`,{
+        const res = await axios.get(
+        `${API_URL}/api/users/search`,{
             params:{
                 limit:10,
                 page,
@@ -108,8 +105,12 @@ const handleSearch = async () => {
     } catch (err) {
       console.error("Search error:", err);
     }
-  };
-    return (
+};
+useEffect(()=>{       
+    getAllUser()
+// eslint-disable-next-line react-hooks/exhaustive-deps
+},[page])
+  return (
         <div className='mx-auto text-black'>
              <div className='flex justify-between items-center'>
                 <p className='text-xl uppercase '>

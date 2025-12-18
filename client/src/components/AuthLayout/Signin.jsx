@@ -3,10 +3,11 @@ import logo from "../../assets/logo.jpg";
 import axios from "axios"
 import { Bounce, ToastContainer } from 'react-toastify';
 import { toast } from 'react-toastify';
-import { Navigate } from 'react-router-dom';
-// import { redirect } from 'react-router';
 
 const Signin = () => {
+    const API_URL = import.meta.env.VITE_API_URL
+    console.log("API_URL",API_URL);
+    
     const [dataSignIn, setDataSignIn] = useState({})
     const onChangeDataSignIn = (e) => {
         const {name, value} = e.target
@@ -19,7 +20,7 @@ const Signin = () => {
             }
             try {
               if(data.email || data.password){
-               const signinUser = await axios.post("http://localhost:4000/account/signin",data)
+               const signinUser = await axios.post(`${API_URL}/account/signin`,data)
                localStorage.setItem("name", signinUser.data.name),
                   localStorage.setItem("idUser", signinUser.data.idUser),
                   localStorage.setItem("role", signinUser.data.role),
