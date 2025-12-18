@@ -85,9 +85,9 @@ function Sidebar({
                 •••
               </span>
               <span 
-              className="lg:hidden lg:sidebar-expanded:block 2xl:block"
+              className="lg:hidden lg:sidebar-expanded:block 2xl:block pt-2"
               >
-                Pages</span>
+                Home</span>
             </h3>
             <ul className='flex flex-col text-xs lg:text-xl'>
              <NavLink className={`hover:bg-gray-300 hover:text-white lg:justify-start justify-center flex items-center border-b-[1px] border-gray-400`} to={"/dashboard"}>

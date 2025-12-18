@@ -54,6 +54,7 @@ function HandlerUser({setOpen,setInForPopup,inForPopup,resetData}) {
     };
     
     const registerUser = async () => {
+      const loadingToast = toast.loading('Đang đăng ký người dùng...'); 
       const dataRegister = {
         name:dataUser.name,
         phone:dataUser.phone,
@@ -82,7 +83,8 @@ function HandlerUser({setOpen,setInForPopup,inForPopup,resetData}) {
         await axios.post(`http://localhost:4000/api/users/${resgisterUser.data.idUser}/medical-profile`,dataMedicalProfileUpdate)  
         .then((res) => {
           if(res.status === 200){
-              toast.success("Đăng ký thành công!");
+              toast.success("Đăng ký thành công!",{id: loadingToast});
+              toast.dismiss(loadingToast);
               setInForPopup({
                 title:""
               }),
@@ -91,12 +93,14 @@ function HandlerUser({setOpen,setInForPopup,inForPopup,resetData}) {
           } 
         })
         .catch((error)=>{
-          toast.error("error đăng ký người dùng + hồ sơ y tế: ",error)
-          console.log("error đăng ký người dùng + hồ sơ y tế: ",error)
+          toast.error("Lỗi đăng ký người dùng: ",error, {id: loadingToast})
+          toast.dismiss(loadingToast);
+          console.log("error đăng ký người dùng: ",error)
         })}
   }
     // cập nhật thông tin người dùng
 const updateUser = async (id)=> {
+  const loadingToast = toast.loading('Đang cập nhật thông tin người dùng...'); 
   const dataUserUpdate = {
       idUser:dataUser.idUser,  
       name:dataUser.name,
@@ -126,6 +130,7 @@ const updateUser = async (id)=> {
     const [response,responseMedicalProfile ]= await Promise.all([request,requestMedicalProfile])
     if(response.status && responseMedicalProfile.status === 200){
          toast.success("thành công")
+         toast.dismiss(loadingToast);
          setTimeout(()=>{
           resetData()
           setInForPopup({
@@ -135,6 +140,7 @@ const updateUser = async (id)=> {
         },2000)}
   } catch (error) {
     toast.warning("Cập nhật thông tin thất bại")
+    toast.dismiss(loadingToast);
     console.log("error cập nhật người dùng: ",error);
   }
 }

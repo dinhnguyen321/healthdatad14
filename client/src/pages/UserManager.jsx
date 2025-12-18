@@ -5,11 +5,12 @@ import InputSearch from '../components/UI/inputSearch';
 import axios from 'axios';
 import { SkeletonTable } from '../components/UI/User/SkeletonTable';
 import Pagination from '../components/UI/User/Pagination';
+import { Bounce, toast,ToastContainer } from 'react-toastify';
 // import {useSearchParams} from 'react-router-dom'
 function UserManager() {
     const role = localStorage.getItem("role")
     // const [searchParams, setSearchParams] = useSearchParams()
-    
+    const [selectedIds ,setSelectedIds] = useState([]); 
     const [isLoading, setIsLoading] = useState(true);
     const [keyword, setKeyword] = useState({
         name:"",
@@ -24,6 +25,11 @@ function UserManager() {
     const [page, setPage] = useState(1);
     const [dataUser,setDataUser] = useState([])
     
+    useEffect(()=>{       
+        getAllUser()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[page])
+
     const getAllUser = async()=>{
         try {
             setIsLoading(true)
@@ -39,22 +45,51 @@ function UserManager() {
              setIsLoading(false);
         }
 }   
-
-    useEffect(()=>{       
-        getAllUser()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[page])
+    const handleSelectOne = (idUser) => {
+        setSelectedIds((prev)=> 
+            prev.includes(idUser) 
+            ? prev.filter((item) => item !== idUser) 
+            : [...prev, idUser]
+        )
+    }         
      
+    const confirmDeleteUser = () =>{
+            if (selectedIds.length === 0) {
+                toast.warning("Chưa chọn người dùng cần xóa!")
+                return
+            };  
+            setInForPopup({
+                title:"delete",
+                idUser: selectedIds
+            }),
+            setShowPopup(!showPopup)
+    }
+
     const deleteUser  = async() => {
-            const idUser = inForPopup.idUser    
-        try {
-                if(idUser){
-                    await axios.delete(`http://localhost:4000/api/users/${idUser}`)
-                    getAllUser()
-                }
-            } catch (error) {
-                console.log("error: ",error);
+             const loadingToast = toast.loading('Đang xử lý xóa...'); 
+             try {
+                if(selectedIds.length > 1){
+                    await axios.post(`http://localhost:4000/api/users/bulk-delete`,
+                     { ids: selectedIds}
+                    )
+                } else {
+                    await axios.delete(`http://localhost:4000/api/users/${selectedIds[0]}`)
+                    .then((res)=>{
+                        console.log(res.data);
+                    }).catch((err)=>{
+                        console.error("Lỗi xóa 1 người dùng:", err);
+                    })
+                } 
+            toast.success('Đã xóa thành công!', {Id: loadingToast})
+            toast.dismiss(loadingToast);
+            setSelectedIds([])
+            getAllUser()
+             } catch (error) {
+                console.error("Lỗi xóa người dùng:", error);
+                toast.error('Xóa thất bại!', { Id: loadingToast });
+                toast.dismiss(loadingToast);
             }
+         
     }
     
 const handleSearch = async () => {
@@ -103,10 +138,15 @@ const handleSearch = async () => {
                 </div>
             </div>
         <div className='overflow-x-auto'>
-                 
+                <button 
+                onClick={()=>confirmDeleteUser()}
+                className='p-2 m-2 border-2 text-white bg-black'>
+                     Xóa người dùng
+                </button>
               <table className="table-auto min-w-full">
                 <thead>
                     <tr>
+                    <th></th>
                     <th className='border px-4 py-2'>STT</th>
                     <th className='border px-4 py-2'>Họ và Tên</th>
                     <th className='border px-4 py-2'>Cấp bậc</th>
@@ -117,9 +157,9 @@ const handleSearch = async () => {
                     <th className='border px-4 py-2'></th>
                     </tr>
                 </thead>
-                    {
-                    isLoading ? <SkeletonTable/> :(
-                    <tbody>
+                {
+                isLoading ? <SkeletonTable/> :(
+                <tbody>
                     {dataUser.users.length === 0 ? (
                         <tr>
                         <td colSpan={8} className='text-center font-bold py-4'>
@@ -129,6 +169,15 @@ const handleSearch = async () => {
                         ) : 
                         dataUser.users.map((item,key)=>(
                         <tr key={key}>
+                        <td>
+                            <input type="checkbox" 
+                            name={item.idUser}
+                             id={item.idUser} 
+                             className='bg-white border-2 p-2 m-2'
+                             checked={selectedIds.includes(item.idUser)}
+                             onChange={()=>handleSelectOne(item.idUser)}
+                             />
+                        </td>
                         <td className='border text-center px-4 py-2'>{key + 1}</td>
                         <td className='border text-center px-4 py-2'>{item.name}</td>
                         <td className='border text-center px-4 py-2'>{item.rank}</td>
@@ -157,7 +206,7 @@ const handleSearch = async () => {
                                 fill="#ffffff"> <g id="icons" transform="translate(56.000000, 160.000000)"> <path d="M61.9,258.010643 L45.1,258.010643 L45.1,242.095788 L53.5,242.095788 L53.5,240.106431 L43,240.106431 L43,260 L64,260 L64,250.053215 L61.9,250.053215 L61.9,258.010643 Z M49.3,249.949769 L59.63095,240 L64,244.114985 L53.3341,254.031929 L49.3,254.031929 L49.3,249.949769 Z" id="edit-[#1479]"> </path> </g> </g> </g> </g></svg>
                             </button>
                         
-                            <button 
+                            {/* <button 
                                 onClick={()=>(
                                 setInForPopup({
                                     title:"delete",
@@ -176,7 +225,7 @@ const handleSearch = async () => {
                                 <path d="M9 5C9 3.89543 9.89543 3 11 3H13C14.1046 3 15 3.89543 15 5V7H9V5Z" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path> 
                                 </g>
                                 </svg>
-                            </button>
+                            </button> */}
                         </>
                         )}
                             <button 
@@ -218,6 +267,19 @@ const handleSearch = async () => {
  {inForPopup.title === "delete" && showPopup ? (
      <DeleteUser deleteUser={deleteUser} close={setShowPopup} setInForPopup={setInForPopup}/>
  ):""}
+  <ToastContainer
+              position="top-right"
+              autoClose={5000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick={false}
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+              theme="light"
+              transition={Bounce}
+              />
         </div>
     
 );
