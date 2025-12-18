@@ -8,8 +8,21 @@ import { testConnection } from './routes/testConnection.js';
 dotenv.config();
 
 const app = express();
+const allowedOrigins = [process.env.ORIGIN, process.env.VERCEL_URL];
 app.use(express.json());
-app.use(cors({ origin: process.env.ORIGIN, credentials: true }));
+app.use(cors({
+   origin: function (origin, callback) {
+    // Cho phép các request không có origin (như Postman hoặc Mobile app) 
+    // hoặc origin nằm trong danh sách trắng
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Chặn bởi CORS: Origin này không được phép!'));
+    }
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+   credentials: true 
+  }));
 app.use(
   session({
     secret: process.env.SESSION_SECRET,

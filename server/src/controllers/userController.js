@@ -218,12 +218,39 @@ export const updateMedicalProfile = async (req, res) => {
   
   // Xóa user + thông tin hồ sơ "vì prisma có onDelete: Cascade"
   export const deleteUser = async (req, res) => {
+    const id = req.params.id;
+    const body = req.body || {}; // check body có thể rỗng
+    const ids = body.ids;
     try {
-      const id = req.params.id;
-      await prisma.user.delete({ where: { idUser:id } });
-      res.json({ message: "Đã xóa người dùng + hồ sơ y tế thành công" });
+    
+      if(Array.isArray(ids) && ids.length > 0){
+        const result = await prisma.user.deleteMany({
+          where: { idUser: { in: ids } }
+        })
+        return res.json({
+          message: `Đã xóa ${result.count} người dùng thành công`,
+          deletedCount: result.count
+        })
+      }
+      // xóa 1 user
+      
+      if(id){
+        await prisma.user.delete({
+           where: { idUser:id } 
+        });
+
+        return res.json({ 
+          message: "Đã xóa người dùng + hồ sơ y tế thành công"
+         });
+      }
+      return res.status(400).json({
+        message: "Thiếu id hoặc danh sách ids"
+      })
+
     } catch (error) {
-      res.status(500).json({ message: "Lỗi khi xóa user", error });
+      res.status(500).json({ 
+        message: "Lỗi khi xóa user", error 
+      });
     }
   };
 

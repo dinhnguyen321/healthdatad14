@@ -13,6 +13,7 @@ router.post('/',createUser)
 router.post('/:userId/medical-profile',createMedicalProfile ) 
 router.put('/:userId/medical-profile',updateMedicalProfile ) 
 router.put('/:id',updateUser)
+router.post('/bulk-delete',deleteUser)
 router.delete('/:id',deleteUser)
 
 export default router
