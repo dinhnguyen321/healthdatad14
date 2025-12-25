@@ -67,7 +67,8 @@ export const signIn= async (req, res) => {
         return res.json({
           name:users.name,
           idUser:users.idUser,
-          role:users.role
+          role:users.role,
+          avt: users.avt
          });
     } catch (error) {
       res.status(500).json({

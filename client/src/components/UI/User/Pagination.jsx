@@ -43,16 +43,16 @@ export default function Pagination({pagination, setPage }) {
               {pagination ? pagination.page : ""}
             </a>
             
-            <span className="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-400 inset-ring inset-ring-gray-700 focus:outline-offset-0">
+            {/* <span className="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-400 inset-ring inset-ring-gray-700 focus:outline-offset-0">
               ...
-            </span>
+            </span> */}
            
-            <a
+            {/* <a
               href="#"
               className="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-800 inset-ring inset-ring-gray-700 hover:bg-white/5 focus:z-20 focus:outline-offset-0"
             >
               {pagination ? pagination.totalPages : ""}
-            </a>
+            </a> */}
             <a
               onClick={()=>setPage(prev => prev + 1)} 
               href="#"

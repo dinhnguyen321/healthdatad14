@@ -10,15 +10,29 @@ import Signin from "./components/AuthLayout/Signin";
 import HandlerUser from "./components/UI/HandlerUser.jsx";
 import {AuthGuard,IsLoggedIn} from "./layouts/ProtectedRoute.jsx";
 import SignUp from "./components/AuthLayout/SignUp.jsx";
+// import ProfileUser from "./pages/ProfileUser.jsx";
+// import axios from "axios";
 function App() {
 const isLoggedIn = IsLoggedIn()
 const [profileUser,setProfileUser] = useState({})
+//  const API_URL = import.meta.env.VITE_API_URL
+// const getProfileUser = async () => {
+//     const user_id = localStorage.getItem("idUser")
+//     if(user_id){
+//       const res = (await axios.get(`${API_URL}/api/users/${user_id}`)).data
+//       console.log("res",res);
+//       setProfileUser()
+//     }
+// }
+// console.log("profileUser",profileUser);
 
 useEffect(()=>{
     const name = localStorage.getItem("name")
     const role = localStorage.getItem("role")
+    const avt = localStorage.getItem("avt")
   if(isLoggedIn){
-    setProfileUser({name:name,role:role})
+    // getProfileUser()
+    setProfileUser({name:name,role:role,avt:avt})
   }
 },[isLoggedIn])
 return (
@@ -44,9 +58,9 @@ return (
                 <Route path="/" element={<Navigate to="/dashboard" replace/>}/>
                 <Route path="/dashboard" element={<Dashboard/>}/>
                 <Route path="/user-manager" element={<UserManager/>} />
+                {/* <Route path="/profile-user" element={<ProfileUser/>} /> */}
             </Route> 
        </Route> 
-       
     </Routes>
     </>
   );

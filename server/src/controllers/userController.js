@@ -1,7 +1,6 @@
 
 import bcrypt from "bcryptjs"
 import {prisma} from "../models/prismaClient.js";
-
 // Lấy danh sách user
 export const getAllUsers = async (req, res) => {
   try {
@@ -16,13 +15,17 @@ export const getAllUsers = async (req, res) => {
           orderBy: { created_at: "desc" },
           select:{
           idUser:true,
+          avt:true,
+          SHQN:true,
           name:true,
           email:true,
           department:true,
           phone:true,
           position:true,
           rank:true,
-          role:true,     
+          role:true,
+          birth_day:true,
+          enlistment_date:true     
       }});
       // Đếm tổng user
       const total = await prisma.user.count();
@@ -65,6 +68,8 @@ export const getAllUsers = async (req, res) => {
         where:{idUser:userId},
         select:{
           idUser:true,
+          avt:true,
+          SHQN:true,
           name: true,
           email: true,
           phone: true,
@@ -101,7 +106,6 @@ const checkUserExist = async(email) => {
   // Tạo user mới
   export const createUser = async (req, res) => {
     const dataCreate = req.body
-    
     const exist = await checkUserExist(dataCreate.email)
     try {
         if(exist){
@@ -164,6 +168,7 @@ export const createMedicalProfile = async (req, res) => {
 export const updateMedicalProfile = async (req, res) => {
   const { userId } = req.params;
   const dataUpdate = req.body;
+  
   try {
     if (Object.keys(dataUpdate).length === 0) {
         return res.status(400).json({ message: "Không có dữ liệu để cập nhật" });
@@ -202,6 +207,7 @@ export const updateMedicalProfile = async (req, res) => {
     try {
       const id = req.params.id;
       const dataUpdate = req.body;
+      console.log("dataUpdate.avt,",dataUpdate);
       
       if (Object.keys(dataUpdate).length === 0) {
         return res.status(400).json({ message: "Không có dữ liệu để cập nhật" });
@@ -291,6 +297,8 @@ export const updateMedicalProfile = async (req, res) => {
       idUser:true,
           name:true,
           email:true,
+          avt:true,
+          SHQN:true,
           department:true,
           phone:true,
           position:true,

@@ -7,11 +7,5 @@ export default defineConfig({
   server: {
     port: 5173,
     strictPort: true,
-    proxy: {
-      '/register-challenge': 'http://localhost:4000',
-      '/register-response': 'http://localhost:4000',
-      '/login-challenge': 'http://localhost:4000',
-      '/login-response': 'http://localhost:4000',
-    },
   },
 });

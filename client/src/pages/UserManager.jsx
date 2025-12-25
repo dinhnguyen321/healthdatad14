@@ -6,6 +6,8 @@ import axios from 'axios';
 import { SkeletonTable } from '../components/UI/User/SkeletonTable';
 import Pagination from '../components/UI/User/Pagination';
 import { Bounce, toast,ToastContainer } from 'react-toastify';
+import {format} from "date-fns"
+import DropdownCRUD from '../components/UI/DropdownCRUD';
 // import {useSearchParams} from 'react-router-dom'
 function UserManager() {
     const role = localStorage.getItem("role")
@@ -26,7 +28,6 @@ function UserManager() {
     const [page, setPage] = useState(1);
     const [dataUser,setDataUser] = useState([])
     
-    
     const getAllUser = async()=>{
         try {
             setIsLoading(true)
@@ -35,12 +36,11 @@ function UserManager() {
             })
             .then((res)=>{
                 setDataUser(res.data)
+                setIsLoading(false);
             })
         } catch (error) {
                 console.log("error: ",error);
-            } finally{
-                setIsLoading(false);
-            }
+        }
 }   
 const handleSelectOne = (idUser) => {
     setSelectedIds((prev)=> 
@@ -110,9 +110,10 @@ useEffect(()=>{
     getAllUser()
 // eslint-disable-next-line react-hooks/exhaustive-deps
 },[page])
+
   return (
-        <div className='mx-auto text-black'>
-             <div className='flex justify-between items-center'>
+        <div className='mx-auto text-black w-3/4 font-semibold' >
+             <div className='flex lg:flex-row flex-col justify-between items-center'>
                 <p className='text-xl uppercase '>
                  Danh sách quân nhân Tiểu Đoàn
                 </p>
@@ -121,9 +122,13 @@ useEffect(()=>{
                 <div className='flex items-center mb-2 gap-x-4'>
                   <InputSearch handleSearch={handleSearch} value={keyword} setKeyword={setKeyword}/>
                   {/* Thêm mới User */}
-                {role === "user" ? "":(
+                </div>
+            </div>
+        <div className='overflow-x-auto'>
+             { role === "user" ? "" : ( 
+                <div className='flex justify-end items-center gap-x-2'>
                 <button 
-                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gray-900 text-gray-100 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-800 dark:hover:bg-white"
+                className="flex items-center gap-x-2 px-4 py-2 rounded-xl bg-gray-700 text-gray-100 hover:bg-blue-500 dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-blue-500"
                 onClick={()=>(
                     setShowPopup(!showPopup),
                     setInForPopup({
@@ -134,28 +139,35 @@ useEffect(()=>{
                    <path d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
                  </svg>
                  <span className="max-xs:sr-only">Thêm mới</span>
-               </button> 
-                )}
-                </div>
-            </div>
-        <div className='overflow-x-auto'>
+                </button> 
                 <button 
                 onClick={()=>confirmDeleteUser()}
-                className='p-2 m-2 border-2 text-white bg-black'>
-                     Xóa người dùng
+                className='flex justify-end relative my-2  
+                '>
+                    <svg className='rounded-lg h-9 w-9 p-2 hover:bg-red-500 bg-gray-700 text-gray-200' viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
+                                    <g id="SVGRepo_iconCarrier"> <path d="M10 12V17" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    </path>
+                                    <path d="M14 12V17" stroke="#ffffff" stroke-width="2" stroke-linecap="round" strokeLinejoin="round"></path> 
+                                    <path d="M4 7H20" stroke="#ffffff" stroke-width="2" strokeLinecap="round" strokeLinejoin="round"></path>
+                                    <path d="M6 10V18C6 19.6569 7.34315 21 9 21H15C16.6569 21 18 19.6569 18 18V10" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path> 
+                                    <path d="M9 5C9 3.89543 9.89543 3 11 3H13C14.1046 3 15 3.89543 15 5V7H9V5Z" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path> 
+                                    </g>
+                    </svg>
                 </button>
+                </div>
+            )}
               <table className="table-auto min-w-full">
                 <thead>
                     <tr>
                     <th></th>
-                    <th className='border px-4 py-2'>STT</th>
-                    <th className='border px-4 py-2'>Họ và Tên</th>
-                    <th className='border px-4 py-2'>Cấp bậc</th>
-                    <th className='border px-4 py-2'>Chức Vụ</th>
-                    <th className='border px-4 py-2'>Đơn vị</th>
-                    <th className='border px-4 py-2'>Số Điện Thoại</th>
-                    <th className='border px-4 py-2'>Email</th>
-                    <th className='border px-4 py-2'></th>
+                    <th className='text-start px-1 py-2'>Họ và Tên</th>
+                    <th className='text-start px-1 py-2'>Nhập ngũ</th>
+                    <th className='text-start px-1 py-2'>Năm sinh</th>
+                    <th className='text-start px-1 py-2'>Cấp bậc</th>
+                    <th className='text-start px-1 py-2'>Chức Vụ</th>
+                    <th className='text-start px-1 py-2'>Đơn vị</th>
+                    <th className='text-start px-1 py-2'></th>
                     </tr>
                 </thead>
                 {
@@ -170,83 +182,38 @@ useEffect(()=>{
                         ) : 
                         dataUser.users.map((item,key)=>(
                         <tr key={key}>
-                        <td>
+                        <td className='border-b text-center px-1 py-2'>
                             <input type="checkbox" 
                             name={item.idUser}
                              id={item.idUser} 
-                             className='bg-white border-2 p-2 m-2'
+                             className='m-1 w-4 h-4 rounded-xs bg-white focus:ring-2 focus:ring-blue-500'
                              checked={selectedIds.includes(item.idUser)}
                              onChange={()=>handleSelectOne(item.idUser)}
                              />
                         </td>
-                        <td className='border text-center px-4 py-2'>{key + 1}</td>
-                        <td className='border text-center px-4 py-2'>{item.name}</td>
-                        <td className='border text-center px-4 py-2'>{item.rank}</td>
-                        <td className='border text-center px-4 py-2'>{item.position}</td>
-                        <td className='border text-center px-4 py-2'>{item.department}</td>
-                        <td className='border text-center px-4 py-2'>{item.phone}</td>
-                        <td className='border text-center px-4 py-2'>{item.email}</td>
-                        <td className='border text-center px-4 py-2'>
-                        <div>
-                            { role === "user" ? "" : ( 
-                                <>
-                            <button 
-                            onClick={()=>(
-                                    setInForPopup({
-                                        title:"edit",
-                                        idUser: item.idUser
-                                    }),
-                                    setShowPopup(!showPopup)
-                                )}
-                                className='text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-2 py-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800' title='Chỉnh sửa'>
-                                <svg className='h-4 w-4 lg:h-6 lg:w-6' 
-                                viewBox="-1 -3 24 24" 
-                                version="1.1" 
-                                xmlns="http://www.w3.org/2000/svg" 
-                                xmlnsXlink="http://www.w3.org/1999/xlink"fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>edit [#1479]</title> <desc>Created with Sketch.</desc> <defs> </defs> <g id="Page-1" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd"> <g id="Dribbble-Light-Preview" transform="translate(-99.000000, -400.000000)" 
-                                fill="#ffffff"> <g id="icons" transform="translate(56.000000, 160.000000)"> <path d="M61.9,258.010643 L45.1,258.010643 L45.1,242.095788 L53.5,242.095788 L53.5,240.106431 L43,240.106431 L43,260 L64,260 L64,250.053215 L61.9,250.053215 L61.9,258.010643 Z M49.3,249.949769 L59.63095,240 L64,244.114985 L53.3341,254.031929 L49.3,254.031929 L49.3,249.949769 Z" id="edit-[#1479]"> </path> </g> </g> </g> </g></svg>
-                            </button>
-                        
-                            {/* <button 
-                                onClick={()=>(
-                                setInForPopup({
-                                    title:"delete",
-                                    idUser: item.idUser
-                                }),
-                                setShowPopup(!showPopup)
-                                )}
-                                className='text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-2 py-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-red-800 dark:focus:ring-blue-800' title='Xóa'>
-                                <svg className='h-4 w-4 lg:h-6 lg:w-6' viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
-                                <g id="SVGRepo_iconCarrier"> <path d="M10 12V17" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                </path>
-                                <path d="M14 12V17" stroke="#ffffff" stroke-width="2" stroke-linecap="round" strokeLinejoin="round"></path> 
-                                <path d="M4 7H20" stroke="#ffffff" stroke-width="2" strokeLinecap="round" strokeLinejoin="round"></path>
-                                <path d="M6 10V18C6 19.6569 7.34315 21 9 21H15C16.6569 21 18 19.6569 18 18V10" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path> 
-                                <path d="M9 5C9 3.89543 9.89543 3 11 3H13C14.1046 3 15 3.89543 15 5V7H9V5Z" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path> 
-                                </g>
-                                </svg>
-                            </button> */}
-                        </>
-                        )}
-                            <button 
-                            onClick={()=>(
-                            setInForPopup({
-                                title:"detail",
-                                idUser: item.idUser
-                            }),
-                            setShowPopup(!showPopup)
-                            )}
-                            title='Xem chi tiết' 
-                            type="button"
-                            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-2 py-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-green-800 dark:focus:ring-blue-800">
-                            <svg fill="#ffffff" className='h-4 w-4 lg:h-6 lg:w-6' viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                            <g id="SVGRepo_iconCarrier">
-                                <path d="M20 3H4c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2h16c1.103 0 2-.897 2-2V5c0-1.103-.897-2-2-2zM4 19V5h16l.002 14H4z">
-                                    </path><path d="M6 7h12v2H6zm0 4h12v2H6zm0 4h6v2H6z"></path></g></svg>
-                            </button>
-                        </div>
+                        <td className='border-b text-start px-1 py-2'>
+                            <div className='flex items-center gap-x-2'>
+                                <div>
+                                    <img
+                                    className='w-12 h-12 object-cover rounded-full'
+                                    src={`${ item.avt ? item.avt : "https://res.cloudinary.com/dssyoikpk/image/upload/v1766493367/z7192639253857_35218d5daa47f331e561cea0993af9ec_uv7epe.jpg"}`} alt="avt" />
+                                </div>
+                                <div>
+                                    <p className='font-extrabold'>{item.name}</p>
+                                    <span className='font-sans font-normal'>SHQN: {item.SHQN}</span>
+                                </div>
+                            </div>
+                            
+                            </td>
+                        <td className='border-b text-start px-1 py-2'>{format(new Date(item.enlistment_date), 'MM/yyyy')}</td>
+                        <td className='border-b text-start px-1 py-2'>{format(new Date(item.birth_day), 'dd/MM/yyyy')}</td>
+                        <td className='border-b text-start px-1 py-2'>{item.rank}</td>
+                        <td className='border-b text-start px-1 py-2'>{item.position}</td>
+                        <td className='border-b text-start px-1 py-2'>{item.department}</td>
+                        <td className='border-b text-center px-1 py-2'>
+                            <div className=''>
+                            <DropdownCRUD item={item} setInForPopup={setInForPopup} setShowPopup={setShowPopup} showPopup={showPopup}/>
+                            </div>
                         </td>
                     </tr>
                     ))}

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import logo from "../../assets/logo.jpg"
+// import logo from "../../assets/logo.jpg"
 import axios from 'axios';
 const SignUp = () => {
     const API_URL = import.meta.env.VITE_API_URL
@@ -88,36 +88,33 @@ const SignUp = () => {
           
     }
     return (
-        <>
-        <section className="h-screen flex flex-col justify-center bg-gray-900">
-        <div className="grid grid-cols-12 w-full px-6 py-8 mx-auto lg:py-0">
-       <div className='hidden col-span-4 lg:flex justify-center items-center'>
-         <a href="/" className="flex flex-col justify-center w-full items-center space-y-4 text-2xl font-semibold text-white">
-          <img className="w-24 h-24 mr-2 rounded-full" src={logo} alt="logo"/>
-        <p className='bg-gradient-to-r bg-clip-text uppercase font-bold text-transparent from-indigo-500 to-purple-500'>  HealthData  </p>  
-        </a>
+        <section className="grid grid-cols-1 md:grid-cols-10 min-h-screen w-full">
+       <div className="md:col-span-6 hidden md:flex bg-[#c21e29] justify-center items-center"
+         >
+            <img src="https://res.cloudinary.com/dssyoikpk/image/upload/v1766234784/HSSK/codang_ofoxn8.png" alt="codang"
+            className='w-44 h-40 object-fill' />
         </div>
-        <div className="lg:col-span-8 col-span-12 mx-auto w-full rounded-lg shadow border md:mt-0 sm:max-w-md xl:p-0 bg-gray-800 border-gray-700">
-          <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-              <h1 className=" bg-gradient-to-r bg-clip-text uppercase text-transparent from-indigo-500 to-purple-500 text-xl font-bold leading-tight tracking-tight md:text-2xl">
-                 Tạo tài khoản
-              </h1>
-              <div className='h-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 
+        <div className="col-span-1 md:col-span-4 flex justify-center items-center w-full shadow border xl:p-0 bg-gray-200">
+          <div className="p-6 space-y-4 md:space-y-6 sm:p-8 sm:max-w-md ">
+              <h1 className=" bg-linear-to-r bg-clip-text uppercase text-transparent from-red-500 via-yellow-600 to-gray-400 text-xl font-bold leading-tight tracking-tight md:text-5xl">
+                 Đăng ký tài khoản
+                 </h1>
+              <div className='h-1 bg-linear-to-r from-red-500 via-yellow-600 to-gray-400
                 bg-300% animate-gradient-flow'></div>
               <form className="space-y-4 md:space-y-6" action="" onSubmit={(e)=>handleSignup(e)}>
               <div>
-                      <label htmlFor="name" className="block mb-2 text-sm font-medium text-white">Họ và tên</label>
+                      <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-700">Họ và tên</label>
                       <input 
                       onChange={(e)=>onChangeInput(e)}
                       type="text" 
                       name="name" 
                       id="name" 
-                      className="text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
+                      className="text-sm rounded-lg focus:ring-amber-600 focus:border-primary-600 block w-full p-2.5 bg-gray-300 border-gray-700 placeholder-gray-400 text-black"
                        placeholder="Nguyễn Văn A" 
                       required=""/>
                         {
                         textValid.textName ? (
-                        <p className="mt-2 px-3 text-red-500 rounded text-sm font-semibold">
+                        <p className="mt-2 text-red-500 rounded text-sm font-semibold">
                         {textValid.textName}
                         </p>
                         ):""
@@ -125,74 +122,66 @@ const SignUp = () => {
                   </div>
                   
                   <div>
-                      <label htmlFor="email" className="block mb-2 text-sm font-medium text-white">Email của bạn</label>
+                      <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-700">Địa chỉ Email</label>
                       <input 
                       onChange={(e)=>onChangeInput(e)}
                       type="email" 
                       name="email" 
                       id="email" 
-                      className="text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
-                       placeholder="fullname@gmail.com" 
+                      className="text-sm rounded-lg focus:ring-amber-600 focus:border-primary-600 block w-full p-2.5 bg-gray-300 border-gray-700 placeholder-gray-400 text-black"
+                       placeholder="tranvana@gmail.com" 
                       required=""/>
                         {
                         textValid.textEmail ? (
-                        <p className="mt-2 px-3 text-red-500 rounded text-sm font-semibold">
+                        <p className="mt-2 text-red-500 rounded text-sm font-semibold">
                         {textValid.textEmail}
                         </p>
                         ):""
                       }
                   </div>
                   <div>
-                      <label htmlFor="password" className="block mb-2 text-sm font-medium text-white">Mật khẩu</label>
+                      <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-700">Mật khẩu</label>
                       <input 
                       onChange={(e)=>onChangeInput(e)}
-                      type="password" name="password" id="password" placeholder="••••••••" className="text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500" 
+                      type="password" name="password" id="password" placeholder="••••••••" className="text-sm rounded-lg focus:ring-amber-600 focus:border-primary-600 block w-full p-2.5 bg-gray-300 border-gray-700 placeholder-gray-400 text-black" 
                       required=""/>
                       {
                         textValid.textPassword ? (
-                        <p className="mt-2 px-3 text-red-500 rounded text-sm font-semibold">
+                        <p className="mt-2 text-red-500 rounded text-sm font-semibold">
                         {textValid.textPassword}
                         </p>
                         ):("")
                       }
-                       <p className='text-xs mt-1 font-bold text-white'>
+                       <p className='text-xs mt-1 font-bold text-gray-700'>
                                 (8-10 ký tự, ít nhất 1 chữ cái (A-z) và 1 chữ số (0-9))
                         </p>
                   </div>
                   <div>
-                      <label htmlFor="confirmPassword" className="block mb-2 text-sm font-medium text-white">Xác nhận mật khẩu</label>
+                      <label htmlFor="confirmPassword" className="block mb-2 text-sm font-medium text-gray-700">Xác nhận mật khẩu</label>
                       <input 
                       onChange={(e)=>onChangeInput(e)}
-                      type="password" name="confirmPassword" id="confirm-password" placeholder="••••••••" className="text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500" 
+                      type="password" name="confirmPassword" id="confirm-password" placeholder="••••••••" className="text-sm rounded-lg focus:ring-amber-600 focus:border-primary-600 block w-full p-2.5 bg-gray-300 border-gray-700 placeholder-gray-400 text-black" 
                       required=""/>
                           {
                         textValid.textConfirmPassword ? (
-                        <p className="mt-2 px-3 text-red-500 rounded text-sm font-semibold">
+                        <p className="mt-2 text-red-500 rounded text-sm font-semibold">
                         {textValid.textConfirmPassword}
                         </p>
                         ):("")
                       }
                   </div>
-                  {/* <div className="flex items-start">
-                      <div className="flex items-center h-5">
-                        <input id="terms" aria-describedby="terms" type="checkbox" className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 bg-gray-700 border-gray-600 focus:ring-primary-600 ring-offset-gray-800" 
-                        required=""/>
-                      </div>
-                      <div className="ml-3 text-sm">
-                        <label htmlFor="terms" className="font-light text-gray-500 text-gray-300">I accept the <a className="font-medium text-primary-600 hover:underline text-primary-500" href="#">Terms and Conditions</a></label>
-                      </div>
-                  </div> */}
-                  <button onClick={(e)=>handleSignup(e)} className="flex w-full justify-center rounded-md bg-indigo-500 px-3 py-1.5 text-sm/6 font-semibold text-white hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">
+                  <button onClick={(e)=>handleSignup(e)} className="flex w-full justify-center rounded-md px-3 py-1.5 text-sm/6 font-semibold text-white bg-linear-to-r from-red-500 via-yellow-600 to-gray-400 hover:from-red-600 hover:via-yellow-700 hover:to-gray-500">
                     Đăng ký tài khoản</button>
-                  <p className="text-center text-sm font-light text-gray-400">
-                      Bạn đã có tài khoản? <a href="/account/signin" className="font-medium text-primary-600 hover:underline text-primary-500">Đăng nhập tại đây</a>
+                  <p className="text-center text-md font-light text-gray-700">
+                      Bạn đã có tài khoản? 
+                      <a href="/account/signin" 
+                      className="font-extrabold hover:underline">
+                        Đăng nhập tại đây</a>
                   </p>
               </form>
           </div>
         </div>
-        </div>
         </section>
-        </>
     );
 };
 

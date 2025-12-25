@@ -1,10 +1,11 @@
 @import "tailwindcss";
 :root {
-  font-family: "Roboto", sans-serif;
+  font-family: "Playfair Display", serif;
+  font-optical-sizing: auto;
+  font-style: normal;
   line-height: 1.5;
   font-weight: 400;
   font-optical-sizing: auto;
-  font-style: normal;
   font-variation-settings:"width" 100;
 
   color-scheme: light dark;
@@ -17,16 +18,12 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* 
-.roboto-<uniquifier> {
-  font-family: "Roboto", sans-serif;
+.roboto-condensed {
+  font-family: "Roboto Condensed", sans-serif;
   font-optical-sizing: auto;
-  font-weight: <weight>;
+  font-weight: 500;
   font-style: normal;
-  font-variation-settings:
-    "wdth" 100;
-} */
-
+}
 
 a {
   font-weight: 500;
@@ -42,7 +39,6 @@ a:hover {
 } */
 
 h1 {
-  font-size: 3.2em;
   line-height: 1.1;
 }
 
@@ -53,9 +49,7 @@ button {
   cursor: pointer;
   transition: border-color 0.25s;
 }
-button:hover {
-  border-color: #646cff;
-}
+
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
@@ -65,9 +59,6 @@ button:focus-visible {
   :root {
     color: #213547;
     background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
   }
   /* button {
     background-color: #f9f9f9;

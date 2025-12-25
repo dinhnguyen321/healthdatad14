@@ -4,7 +4,8 @@ import session from 'express-session';
 import dotenv from 'dotenv';
 import userRouters from "./routes/userRoutes.js"
 import LoginRouters from "./routes/loginRoutes.js"
-import { testConnection } from './routes/testConnection.js';
+import cloudinaryRoutes from "./routes/cloudinaryRoutes.js"
+// import { testConnection } from './routes/testConnection.js';
 dotenv.config();
 
 const app = express();
@@ -32,9 +33,11 @@ app.use(
   })
 );
 
+
 app.use("/api/users",userRouters)
 app.use("/account",LoginRouters)
-testConnection()
+app.use("/api/upload",cloudinaryRoutes)
+// testConnection()
 
 app.listen(PORT, () =>
   console.log(`✅ Server running at http://localhost:${PORT}`)

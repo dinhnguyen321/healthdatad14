@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import logo from "../../assets/logo.jpg";
 import axios from "axios"
 import { Bounce, ToastContainer } from 'react-toastify';
 import { toast } from 'react-toastify';
@@ -24,6 +23,7 @@ const Signin = () => {
                localStorage.setItem("name", signinUser.data.name),
                   localStorage.setItem("idUser", signinUser.data.idUser),
                   localStorage.setItem("role", signinUser.data.role),
+                  localStorage.setItem("avt", signinUser.data.avt),
                   window.location.reload()
                 toast.success(`Xin chào ${signinUser.data.name}`)
               }
@@ -33,64 +33,75 @@ const Signin = () => {
             }
     }
     return (
-        <div className="flex h-screen flex-col justify-center px-6 py-12 lg:px-8 bg-gray-900">
-        
-        <div className="sm:mx-auto sm:w-full sm:max-w-sm bg-gray-800x p-6 space-y-4 md:space-y-6 sm:p-8 rounded-lg shadow">
-        <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          <img src={logo} alt="HealthDataD14" className="mx-auto h-20 w-auto rounded-full" />
-          <p className="mt-5 bg-clip-text uppercase text-transparent bg-gradient-to-r from-indigo-500 to-purple-500 font-bold leading-tight tracking-tight text-lg text-center lg:text-xl">Đăng Nhập Tài Khoản</p>
-          <div className='h-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 
-                bg-300% animate-gradient-flow'></div>
-        </div>
-          <form action="" method="POST" className="space-y-6">
-            <div>
-              <label htmlFor="email" className="block text-sm/6 font-medium text-gray-100">Địa chỉ Email</label>
-              <div className="mt-2">
-                <input onChange={onChangeDataSignIn} id="email" type="email" name="email" required autoComplete="email" className="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6" />
+        <div className="grid grid-cols-1 md:grid-cols-10 min-h-screen w-full">
+        <div className='col-span-1 md:col-span-4 flex justify-center items-center w-full shadow border xl:p-0 bg-gray-200'>
+            <div className="sm:mx-auto sm:w-full sm:max-w-sm bg-gray-800x p-6 space-y-4 md:space-y-6 sm:p-8 rounded-lg shadow">
+              <div className="sm:mx-auto sm:w-full sm:max-w-sm space-y-2">
+                <img src={"https://res.cloudinary.com/dssyoikpk/image/upload/v1766220405/HSSK/img2_udl54h.jpg"} alt="HealthDataD14"
+                className="mx-auto h-24 w-24 rounded-full object-cover" />
+                <p className="text-center bg-linear-to-r bg-clip-text uppercase text-transparent from-red-500 via-yellow-600 to-gray-400 text-xl font-bold leading-tight tracking-tight md:text-2xl">Đăng Nhập Tài Khoản</p>
+                <div className='h-1 bg-linear-to-r from-red-500 via-yellow-600 to-gray-400 
+                      bg-300% animate-gradient-flow'> </div>
               </div>
-            </div>
-        
-            <div>
-              <div className="flex items-center justify-between">
-                <label htmlFor="password" className="block text-sm/6 font-medium text-gray-100">Mật Khẩu</label>
-                <div className="text-sm">
-                  <a href="#" className="font-semibold text-indigo-400 hover:text-indigo-300">Quên Mật Khẩu?</a>
+              <form action="" method="POST" className="space-y-6">
+                <div>
+                  <label htmlFor="email" 
+                  className="block text-sm/6 font-medium text-gray-700">
+                    Địa chỉ Email</label>
+                  <div className="mt-2">
+                    <input onChange={onChangeDataSignIn} id="email" type="email" name="email" required autoComplete="email" className="text-sm rounded-lg focus:ring-amber-600 focus:border-primary-600 block w-full p-2.5 bg-gray-300 border-gray-700 placeholder-gray-400 text-black" />
+                  </div>
                 </div>
-              </div>
-              <div className="mt-2">
-                <input onChange={onChangeDataSignIn} id="password" type="password" name="password" required autoComplete="current-password" className="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6" />
-              </div>
-            </div>
-        
-            <div>
-              <button 
-              onClick={signIn} 
-              type="button" 
-              className="flex w-full justify-center rounded-md bg-indigo-500 px-3 py-1.5 text-sm/6 font-semibold text-white hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">
-                Đăng nhập</button>
-            </div>
+            
+                <div>
+                  <div className="flex items-center justify-between">
+                    <label htmlFor="password" className="block text-sm/6 font-medium text-gray-700">Mật Khẩu</label>
+                    {/* <div className="text-sm">
+                      <a href="#" className="font-semibold text-indigo-400 hover:text-indigo-300">Quên Mật Khẩu?</a>
+                    </div> */}
+                  </div>
+                  <div className="mt-2">
+                    <input onChange={onChangeDataSignIn} id="password" type="password" name="password" required autoComplete="current-password" className="text-sm rounded-lg focus:ring-amber-600 focus:border-primary-600 block w-full p-2.5 bg-gray-300 border-gray-700 placeholder-gray-400 text-black" />
+                  </div>
+                </div>
+            
+                <div>
+                  <button 
+                  onClick={signIn} 
+                  type="button" 
+                  className="flex w-full justify-center rounded-md px-3 py-1.5 text-sm/6 font-semibold text-white bg-linear-to-r from-red-500 via-yellow-600 to-gray-400 hover:from-red-600 hover:via-yellow-700 hover:to-gray-500">
+                    Đăng nhập</button>
+                </div>
 
-          </form>
-          <ToastContainer
-              position="top-right"
-              autoClose={5000}
-              hideProgressBar={false}
-              newestOnTop={false}
-              closeOnClick={false}
-              rtl={false}
-              pauseOnFocusLoss
-              draggable
-              pauseOnHover
-              theme="light"
-              transition={Bounce}
-              />
-          <p className="mt-10 text-center text-sm/6 text-gray-400">
-            Bạn chưa có tài khoản?
-            <a href="/account/register" className="pl-2 font-semibold text-indigo-400 hover:text-indigo-300">Đăng ký ngay!</a>
-          </p>
+              </form>
+          
+              <p className="mt-10 text-center text-sm/6 text-gray-400">
+                Bạn chưa có tài khoản?
+                <a href="/account/register" className="pl-2 font-semibold text-indigo-400 hover:text-indigo-300">Đăng ký ngay!</a>
+              </p>
+            </div>
         </div>
+        
+        <div className='md:col-span-6 hidden md:flex bg-[#c21e29] justify-center items-center'>
+            <img 
+            src="https://res.cloudinary.com/dssyoikpk/image/upload/v1766246772/HSSK/covietnam_qolyps.png" alt="covietnam"
+            className='w-60 h-40 object-fill' />
+        </div>
+        
         </div>
     );
 };
-
+    <ToastContainer
+      position="top-right"
+      autoClose={5000}
+      hideProgressBar={false}
+      newestOnTop={false}
+      closeOnClick={false}
+      rtl={false}
+      pauseOnFocusLoss
+      draggable
+      pauseOnHover
+      theme="light"
+      transition={Bounce}
+    />
 export default Signin;

@@ -4,14 +4,19 @@ import InputUser from './User/InputUser';
 import axios from "axios"
 import {Bounce, ToastContainer, toast} from "react-toastify"
 import { PlayPauseIcon } from '@heroicons/react/20/solid';
+import UploadImage from './UploadImage';
 
 function HandlerUser({setOpen,setInForPopup,inForPopup,resetData}) {
   const API_URL = import.meta.env.VITE_API_URL
+  const [image, setImage] = useState(null)
+  
   const [dataUser, setDataUser] = useState({
       idUser:"",  
       name: "",
       email: "",
+      avt:"",
       phone: "",
+      SHQN:"",
       birth_day:"",
       address:"",
       rank:"",
@@ -40,7 +45,6 @@ function HandlerUser({setOpen,setInForPopup,inForPopup,resetData}) {
       const {name,value} = e.target
       setDataUser((prev)=>({...prev, [name]: value}) )
     }
-
     const onChangeMedical = (e) => {
     const { name, value } = e.target;
 
@@ -53,8 +57,38 @@ function HandlerUser({setOpen,setInForPopup,inForPopup,resetData}) {
       }));
     };
     
+    
+  const handleUpload = async () => {
+    if (!image) return alert("Chọn ảnh đã bạn ơi!");
+    const loadingToast = toast.loading('Đang đăng ký người dùng...'); 
+
+    const formData = new FormData();
+    formData.append('image', image); // 'image' phải trùng với upload.single('image') ở BE
+    
+    try {
+      const response = await axios.post(`
+        ${API_URL}/api/upload`,
+         formData,
+      );
+
+      const data = await response.data;
+        
+      if (data.url) {
+        setImage(data.url)
+        toast.success(`"Thành công! Link ảnh: " + ${data.url} `,{id: loadingToast});
+        toast.dismiss(loadingToast);
+        return data.url
+      }
+    } catch (error) {
+      toast.error(`Upload hình ảnh không thành công. `,{id: loadingToast});
+      toast.dismiss(loadingToast);
+      console.error("Lỗi upload:", error);
+    } 
+  };
+      
     const registerUser = async () => {
       const loadingToast = toast.loading('Đang đăng ký người dùng...'); 
+    
       const dataRegister = {
         name:dataUser.name,
         phone:dataUser.phone,
@@ -62,6 +96,8 @@ function HandlerUser({setOpen,setInForPopup,inForPopup,resetData}) {
         password:dataUser.password,
         rank:dataUser.rank,
         position:dataUser.position,
+        SHQN:dataUser.SHQN,
+        avt:image !== null ? await handleUpload() : dataUser.avt,
         department:dataUser.department,
         enlistment_date:new Date(dataUser.enlistment_date),
         birth_day:new Date(dataUser.birth_day),
@@ -94,11 +130,6 @@ function HandlerUser({setOpen,setInForPopup,inForPopup,resetData}) {
         console.log("error", error);
        })
       
-          // toast.warning(`Đăng ký không thành công, ${res.status} `,{id: loadingToast});
-          // setTimeout(()=> {
-          //     toast.dismiss(loadingToast);
-          // },2000)} 
-
       if(resgisterUser.status === 200){
         await axios.post(`${API_URL}/api/users/${resgisterUser.data.idUser}/medical-profile`,dataMedicalProfileUpdate)  
         .then((res) => {
@@ -120,9 +151,11 @@ function HandlerUser({setOpen,setInForPopup,inForPopup,resetData}) {
           console.log("error đăng ký hồ sơ người dùng: ",error)
         })}
   }
+
     // cập nhật thông tin người dùng
 const updateUser = async (id)=> {
   const loadingToast = toast.loading('Đang cập nhật thông tin người dùng...'); 
+   
   const dataUserUpdate = {
       idUser:dataUser.idUser,  
       name:dataUser.name,
@@ -130,10 +163,13 @@ const updateUser = async (id)=> {
       rank:dataUser.rank,
       position:dataUser.position,
       department:dataUser.department,
+      avt: image !== null ? await handleUpload() : dataUser.avt,
+      SHQN:dataUser.SHQN,
       enlistment_date:new Date(dataUser.enlistment_date),
       address:dataUser.address,
       birth_day:new Date(dataUser.birth_day),
   }
+   
   const dataMedicalProfileUpdate = {
         health_insurance_code :dataUser.medicalProfile.health_insurance_code,
         height_cm:Number(dataUser.medicalProfile.height_cm),
@@ -180,6 +216,7 @@ const updateUser = async (id)=> {
       if (!v) return "";
       return v.length > 10 ? v.split("T")[0] : v;
     };
+    
     return (
         <div className='fixed inset-0 flex items-center justify-center z-90'>
             <div className='w-full lg:w-4/5 border mx-auto text-black rounded-lg z-100 max-h-[90vh] overflow-y-auto'>
@@ -207,6 +244,19 @@ const updateUser = async (id)=> {
                 <div className='col-span-12 space-y-2'>
                   <h2 className='font-bold text-xl'>Thông tin quân nhân</h2>
                   <div className='border-2 space-y-4 px-2 py-4 border-purple-800 rounded-md'>
+                    <div className='flex justify-center items-center'>
+                      <UploadImage avtfromData={dataUser.avt} setImage={setImage}/>
+                    </div>
+                    <div className='gap-x-5'>
+                        <InputUser
+                      onChangeInput={onChangeInput}
+                      title={inForPopup.title}
+                      value={dataUser.SHQN} 
+                      label={"Số hiệu quân nhân"}
+                      type={"text"}
+                      id={"SHQN"}
+                      />  
+                    </div>
                   {/* row 1 */}
                   <div className='flex gap-x-5'>
                       <InputUser
@@ -370,8 +420,9 @@ const updateUser = async (id)=> {
                   </div>
                 </div>
             </div> 
-            
+
                 <div className='py-5 flex items-center justify-center'>
+               
                   {/* button tạo mới */}
                   {inForPopup.title === "add" ? 
                    ( <button className='flex items-center justify-center bg-red-500 hover:bg-red-700 px-2 py-1 rounded-md text-white'
