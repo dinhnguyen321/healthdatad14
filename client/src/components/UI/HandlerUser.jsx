@@ -249,9 +249,12 @@ function HandlerUser({setOpen,setInForPopup,inForPopup,resetData}) {
     };
     
     return (
-        <div className='fixed inset-0 flex items-center justify-center z-90'>
-            <div className='w-full lg:w-4/5 border mx-auto text-black rounded-lg z-100 max-h-[90vh] overflow-y-auto'>
-              <div className='flex items-center justify-between border-b px-4 bg-gray-300 rounded-lg'>
+        <div className='fixed w-4/5 top-1/2 -translate-y-1/2 
+        h-fit mx-auto inset-0 
+        flex items-center justify-center z-90 bg-white 
+        rounded-lg overflow-hidden shadow-2xl'>
+            <div className='w-full mx-auto text-black rounded-lg z-100 max-h-[90vh] overflow-y-auto'>
+              <div className='flex items-center justify-between border-b px-4 bg-gray-300'>
               <h2 className="text-xl font-bold px-4 py-2">
               {inForPopup.title === "edit" ? "Chỉnh sửa" : ""}
               {inForPopup.title === "detail" ? "Xem chi tiết" : ""}
@@ -279,7 +282,8 @@ function HandlerUser({setOpen,setInForPopup,inForPopup,resetData}) {
                       <UploadImage avtfromData={dataUser.avt} setImage={setImage}/>
                     </div>
                     <div className='gap-x-5'>
-                        <InputUser
+                      <InputUser
+                      readOnly={inForPopup.title === "detail" ? true : false}
                       onChangeInput={onChangeInput}
                       title={inForPopup.title}
                       value={dataUser.SHQN} 
@@ -291,6 +295,7 @@ function HandlerUser({setOpen,setInForPopup,inForPopup,resetData}) {
                   {/* row 1 */}
                   <div className='flex gap-x-5'>
                       <InputUser
+                      readOnly={inForPopup.title === "detail" ? true : false}
                       onChangeInput={onChangeInput}
                       title={inForPopup.title}
                       value={dataUser.name} 
@@ -299,6 +304,7 @@ function HandlerUser({setOpen,setInForPopup,inForPopup,resetData}) {
                       id={"name"}
                       />
                       <InputUser
+                      readOnly={inForPopup.title === "detail" ? true : false}
                       onChangeInput={onChangeInput}
                       title={inForPopup.title}
                       value={dataUser.phone} 
@@ -307,6 +313,7 @@ function HandlerUser({setOpen,setInForPopup,inForPopup,resetData}) {
                       id={"phone"}
                       />
                       <InputUser
+                      readOnly={inForPopup.title === "detail" ? true : false}
                       onChangeInput={onChangeInput}
                       title={inForPopup.title}
                       value={normalizeDate(dataUser.birth_day)} 
@@ -318,6 +325,7 @@ function HandlerUser({setOpen,setInForPopup,inForPopup,resetData}) {
                   {/* row 2 */}
                   <div className='flex gap-x-5'>
                       <InputUser
+                      readOnly={inForPopup.title === "detail" ? true : false}
                       onChangeInput={onChangeInput}
                       title={inForPopup.title}
                       value={dataUser.rank}  
@@ -326,6 +334,7 @@ function HandlerUser({setOpen,setInForPopup,inForPopup,resetData}) {
                       id={"rank"}
                       />
                       <InputUser
+                      readOnly={inForPopup.title === "detail" ? true : false}
                       onChangeInput={onChangeInput}
                       title={inForPopup.title}
                       value={dataUser.position} 
@@ -334,6 +343,7 @@ function HandlerUser({setOpen,setInForPopup,inForPopup,resetData}) {
                       id={"position"}
                       />
                         <InputUser
+                        readOnly={inForPopup.title === "detail" ? true : false}
                       onChangeInput={onChangeInput}
                       title={inForPopup.title}
                       value={dataUser.department} 
@@ -345,6 +355,7 @@ function HandlerUser({setOpen,setInForPopup,inForPopup,resetData}) {
                   {/* row 3 */}
                   <div className='flex gap-x-5'>
                       <InputUser
+                      readOnly={inForPopup.title === "detail" ? true : false}
                       onChangeInput={onChangeInput}
                       title={inForPopup.title}
                       value={normalizeDate(dataUser.enlistment_date)}  
@@ -353,6 +364,7 @@ function HandlerUser({setOpen,setInForPopup,inForPopup,resetData}) {
                       id={"enlistment_date"}
                       />
                       <InputUser
+                      readOnly={inForPopup.title === "detail" ? true : false}
                       onChangeInput={onChangeInput}
                       title={inForPopup.title}
                       value={dataUser.address}  
@@ -361,6 +373,7 @@ function HandlerUser({setOpen,setInForPopup,inForPopup,resetData}) {
                       id={"address"}
                       />
                         <InputUser
+                        readOnly={inForPopup.title === "detail" ? true : false}
                       onChangeInput={onChangeInput}
                       title={inForPopup.title}
                       value={dataUser.email}  
@@ -375,6 +388,7 @@ function HandlerUser({setOpen,setInForPopup,inForPopup,resetData}) {
                   {/* row 1 */}
                   <div className='flex gap-x-5'>
                       <InputUser
+                      readOnly={inForPopup.title === "detail" ? true : false}
                       onChangeInput={onChangeMedical}
                       title={inForPopup.title}
                       value={dataUser.medicalProfile.health_insurance_code} 
@@ -383,6 +397,7 @@ function HandlerUser({setOpen,setInForPopup,inForPopup,resetData}) {
                       id={"health_insurance_code"}
                       />
                       <InputUser
+                      readOnly={inForPopup.title === "detail" ? true : false}
                       onChangeInput={onChangeMedical}
                       title={inForPopup.title}
                       value={dataUser.medicalProfile.blood_type} 
@@ -394,6 +409,7 @@ function HandlerUser({setOpen,setInForPopup,inForPopup,resetData}) {
                   {/* row 2 */}
                   <div className='flex gap-x-5'>
                        <InputUser
+                       readOnly={inForPopup.title === "detail" ? true : false}
                       onChangeInput={onChangeMedical}
                       title={inForPopup.title}
                       value={dataUser.medicalProfile.height_cm}  
@@ -402,6 +418,7 @@ function HandlerUser({setOpen,setInForPopup,inForPopup,resetData}) {
                       id={"height_cm"}
                       />
                       <InputUser
+                      readOnly={inForPopup.title === "detail" ? true : false}
                       onChangeInput={onChangeMedical}
                       title={inForPopup.title}
                       value={dataUser.medicalProfile.weight_kg} 
@@ -410,6 +427,7 @@ function HandlerUser({setOpen,setInForPopup,inForPopup,resetData}) {
                       id={"weight_kg"}
                       />
                        <InputUser
+                       readOnly={inForPopup.title === "detail" ? true : false}
                       onChangeInput={onChangeMedical}
                       title={inForPopup.title}
                       value={dataUser.medicalProfile.bmi} 
@@ -421,6 +439,7 @@ function HandlerUser({setOpen,setInForPopup,inForPopup,resetData}) {
                   {/* row 3*/}
                   <div className='flex gap-x-5'>
                       <InputUser
+                      readOnly={inForPopup.title === "detail" ? true : false}
                       textarea={true}
                       onChangeInput={onChangeMedical}
                       title={inForPopup.title}
@@ -430,6 +449,7 @@ function HandlerUser({setOpen,setInForPopup,inForPopup,resetData}) {
                       id={"medical_history"}
                       />
                       <InputUser
+                      readOnly={inForPopup.title === "detail" ? true : false}
                       textarea={true}
                       onChangeInput={onChangeMedical}
                       title={inForPopup.title}
@@ -439,6 +459,7 @@ function HandlerUser({setOpen,setInForPopup,inForPopup,resetData}) {
                       id={"current_disease"}
                       />
                       <InputUser
+                      readOnly={inForPopup.title === "detail" ? true : false}
                       textarea={true}
                       onChangeInput={onChangeMedical}
                       title={inForPopup.title}

@@ -70,15 +70,15 @@ const handleSelectOne = (idUser) => {
                     await axios.post(`${API_URL}/api/users/bulk-delete`,
                      { ids: selectedIds}
                     )
+                    toast.success('Đã xóa thành công!', {Id: loadingToast})
                 } else {
                     await axios.delete(`${API_URL}/api/users/${selectedIds[0]}`)
                     .then(()=>{
-                        toast.success('Đã xóa 1 người dùng thành công!')
+                        toast.success('Đã xóa thành công!')
                     }).catch((err)=>{
                         console.error("Lỗi xóa 1 người dùng:", err);
                     })
                 } 
-                toast.success('Đã xóa thành công!', {Id: loadingToast})
                 toast.dismiss(loadingToast);
                 setSelectedIds([])
                 getAllUser()
@@ -186,7 +186,7 @@ useEffect(()=>{
                         </tr>  
                         ) : 
                         dataUser.users?.map((item,key)=>(
-                        <tr key={key} >
+                        <tr key={key} className=''>
                         <td className='border-b text-center px-1 py-2'>
                             <input type="checkbox" 
                             name={item.idUser}
@@ -240,7 +240,8 @@ useEffect(()=>{
         </div>
  {
      inForPopup.title ? (
-         <div className="fixed w-full lg:w-4/5 left-1/2 top-1/2 -translate-1/2 h-full bg-white z-40"></div>
+         <div className={`fixed w-full left-1/2 top-1/2 -translate-1/2 z-50 bg-white h-full opacity-50
+            `}></div>
      ):("")
  }
  {inForPopup.title === "detail" || inForPopup.title === "edit" || inForPopup.title === "add" && showPopup ? (

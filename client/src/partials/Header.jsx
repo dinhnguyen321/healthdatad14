@@ -77,8 +77,8 @@ function Header({sidebarOpen,setSidebarOpen,profileUser}) {
                 className={`w-full hover:bg-[#f2ff00e3] hover:text-white p-2 
                 flex justify-center lg:justify-between items-center 
                 border-gray-400 rounded-lg transition-all delay-100 ease-linear
-                ${pathname === "/dashboard" ? "text-red-500 bg-[#f3ff00]" : "text-white"}
-                `} to={"/dashboard"}>
+                ${pathname === "/homepage" ? "text-red-500 bg-[#f3ff00]" : "text-white"}
+                `} to={"/homepage"}>
                   <p className={`text-sm block px-2 text-nowrap font-bold
                     `}>Trang chủ</p> 
                 </NavLink>
@@ -133,8 +133,8 @@ function Header({sidebarOpen,setSidebarOpen,profileUser}) {
                   className={`w-full hover:bg-gray-300 hover:text-white p-2 
                   flex justify-start lg:justify-between items-center 
                   border-gray-400 rounded-lg transition-all delay-100 ease-linear
-                  ${pathname === "/dashboard" ? "text-white bg-gray-300" : ""}
-                  `} to={"/dashboard"}>
+                  ${pathname === "/homepage" ? "text-white bg-gray-300" : ""}
+                  `} to={"/homepage"}>
                     <p className={`text-sm text-black block px-2 text-nowrap
                       `}>Trang chủ</p> 
                   </NavLink>

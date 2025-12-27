@@ -7,7 +7,8 @@ import React from 'react';
     title,
     id,
     onChangeInput,
-    textarea = false
+    textarea = false,
+    readOnly = false
 }) => { 
     return (
         <div 
@@ -21,7 +22,7 @@ import React from 'react';
                     onChange={onChangeInput}
                     name={id}
                     id={id}
-                    readOnly={title === "detail" ? true : false}
+                    readOnly={readOnly}
                     className={`
                     block px-2.5 pb-2.5 pt-4 w-full text-sm 
                     text-heading bg-transparent rounded-lg 
