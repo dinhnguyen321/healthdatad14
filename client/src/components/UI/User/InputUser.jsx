@@ -66,7 +66,7 @@ import React from 'react';
                     bg-white
                     ${textarea ? " peer-placeholder-shown:top-1/6": "peer-placeholder-shown:top-1/2"}
                     ${title === "detail" ? " text-gray-500 focus:select-none cursor-not-allowed pointer-none select-none":""}
-                    `}>{label} {id === "name" || id === "email" ? (
+                    `}>{label} {id === "name" || id === "SHQN" ? (
                         <span className='text-red-600'>
                             (Bắt buộc điền)
                         </span>

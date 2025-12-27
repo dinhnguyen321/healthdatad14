@@ -9,7 +9,7 @@ import UploadImage from './UploadImage';
 function HandlerUser({setOpen,setInForPopup,inForPopup,resetData}) {
   const API_URL = import.meta.env.VITE_API_URL
   const [image, setImage] = useState(null)
-  
+  const [initialData, setInitialData] = useState(null)
   const [dataUser, setDataUser] = useState({
       idUser:"",  
       name: "",
@@ -40,27 +40,25 @@ function HandlerUser({setOpen,setInForPopup,inForPopup,resetData}) {
         created_at:"",
       },
      })
-     
     const onChangeInput = (e) =>{
       const {name,value} = e.target
       setDataUser((prev)=>({...prev, [name]: value}) )
     }
     const onChangeMedical = (e) => {
-    const { name, value } = e.target;
+      const { name, value } = e.target;
 
-      setDataUser((prev) => ({
-      ...prev,
-      medicalProfile: {
-      ...prev.medicalProfile,
-      [name]: value,
-      },
-      }));
+        setDataUser((prev) => ({
+        ...prev,
+        medicalProfile: {
+        ...prev.medicalProfile,
+        [name]: value,
+        },
+        }));
     };
     
     
-  const handleUpload = async () => {
+    const handleUpload = async () => {
     if (!image) return alert("Chọn ảnh đã bạn ơi!");
-    const loadingToast = toast.loading('Đang đăng ký người dùng...'); 
 
     const formData = new FormData();
     formData.append('image', image); // 'image' phải trùng với upload.single('image') ở BE
@@ -75,20 +73,20 @@ function HandlerUser({setOpen,setInForPopup,inForPopup,resetData}) {
         
       if (data.url) {
         setImage(data.url)
-        toast.success(`"Thành công! Link ảnh: " + ${data.url} `,{id: loadingToast});
-        toast.dismiss(loadingToast);
+        // toast.success(`"Thành công! Link ảnh: " + ${data.url} `,{id: loadingToast});
+        // toast.dismiss(loadingToast);
         return data.url
       }
     } catch (error) {
-      toast.error(`Upload hình ảnh không thành công. `,{id: loadingToast});
-      toast.dismiss(loadingToast);
+      // toast.error(`Upload hình ảnh không thành công. `,{id: loadingToast});
+      // toast.dismiss(loadingToast);
       console.error("Lỗi upload:", error);
     } 
   };
       
     const registerUser = async () => {
-      const loadingToast = toast.loading('Đang đăng ký người dùng...'); 
-    
+      const loadingToast = toast.loading('Đang đăng ký người dùng ...'); 
+
       const dataRegister = {
         name:dataUser.name,
         phone:dataUser.phone,
@@ -113,27 +111,20 @@ function HandlerUser({setOpen,setInForPopup,inForPopup,resetData}) {
         treatment_plan:dataUser.medicalProfile.treatment_plan,
         blood_type :dataUser.medicalProfile.blood_type
       }
-      if(!dataRegister.name || !dataRegister.email || !dataUser.password) {
+
+      if(!dataRegister.name || !dataRegister.SHQN || !dataUser.password) {
         toast.dismiss(loadingToast);
         toast.warning(`Chưa điền đủ thông tin bắt buộc`,{id: loadingToast});
         return
-        } 
-      
-       const resgisterUser = await axios.post(`${API_URL}/api/users`,dataRegister)
-       .then((res)=> {
-        toast.success(`Đăng ký người dùng thành công. ${res.status} `,{id: loadingToast});
-        toast.dismiss(loadingToast);
-      })
-       .catch((error)=>{
-        toast.error(`Đăng ký người không thành công. ${error.response.data.message} `,{id: loadingToast});
-        toast.dismiss(loadingToast);
-        console.log("error", error);
-       })
-      
-      if(resgisterUser.status === 200){
-        await axios.post(`${API_URL}/api/users/${resgisterUser.data.idUser}/medical-profile`,dataMedicalProfileUpdate)  
-        .then((res) => {
-          if(res.status === 200){
+      } 
+      try {
+        const resgisterUser = await axios.post(`${API_URL}/api/users`,dataRegister)
+        
+         if(resgisterUser.status === 200){
+            await axios.post(`${API_URL}/api/users/${resgisterUser.data.idUser}/medical-profile`,dataMedicalProfileUpdate)  
+            .then((res)=>{
+              if(res.status === 200){
+              toast.dismiss(loadingToast);
               toast.success("Đăng ký hồ sơ thành công!",{id: loadingToast});
               setTimeout(()=> {
                 toast.dismiss(loadingToast);
@@ -143,17 +134,20 @@ function HandlerUser({setOpen,setInForPopup,inForPopup,resetData}) {
                 resetData()
                 setOpen(false)
               },1500)
-          }
-        })
-        .catch((error)=>{
+              }
+            })
+            .catch((error)=>{
+              toast.warning("Đăng ký hồ sơ không thành công!",error);
+              return
+            })
+        }
+      } catch (error) {
           toast.error("Lỗi đăng ký hồ sơ người dùng: ",error, {id: loadingToast})
           toast.dismiss(loadingToast);
           console.log("error đăng ký hồ sơ người dùng: ",error)
-        })}
-  }
-
-    // cập nhật thông tin người dùng
-const updateUser = async (id)=> {
+      }}
+        // cập nhật thông tin người dùng
+        const updateUser = async (id)=> {
   const loadingToast = toast.loading('Đang cập nhật thông tin người dùng...'); 
    
   const dataUserUpdate = {
@@ -180,7 +174,13 @@ const updateUser = async (id)=> {
         treatment_plan:dataUser.medicalProfile.treatment_plan,
         blood_type :dataUser.medicalProfile.blood_type
   }
-
+  
+  if(!hasChanges()){
+    toast.info("Không có thông tin gì thay đổi.")
+    toast.dismiss(loadingToast)
+    return
+  }
+  
   try {
     const request = await axios.put(`${API_URL}/api/users/${id}`,dataUserUpdate)
     const requestMedicalProfile = await axios.put(`${API_URL}/api/users/${id}/medical-profile`,dataMedicalProfileUpdate)  
@@ -203,9 +203,40 @@ const updateUser = async (id)=> {
   }
 }
 
+        // Kiểm tra xem có dữ liệu thay đổi thì cho tiến hành update
+        const hasChanges = () => {
+          if(image !== null) return true;
+
+          const checkDeep = (current, original) => {
+            // Duyệt qua tất cả các key của dataUser
+            for (let key in current) {
+              if(['updated_at', 'created_at', 'id', 'userId', 'role', 'password'].includes(key)) continue; // danh sách các trường k thay đổi
+
+              const val1 = current[key]
+              const val2 = original ? original[key] : undefined
+
+              // check medicalProfile
+              if(val1 && typeof val1 === 'object' && !(val1 instanceof Date)){
+                if(checkDeep(val1,val2)) return true
+              }
+              // So sánh ngày tháng qua getTime()
+              else if (val1 instanceof Date || (typeof val1 === 'string' && !isNaN(Date.parse(val1)) && key.includes('_'))) {
+              if (new Date(val1).getTime() !== new Date(val2).getTime()) return true;
+              }
+              // So sánh các giá trị thông thường đưa về chuỗi để tránh lệch kiểu
+              else {
+                if (String(val1 || "") !== String(val2 || "")) return true;
+              }
+            }
+            return false;
+          }
+          return checkDeep(dataUser, initialData)
+        }
+
     const getUserById =async() => {
           const res = await axios.get(`${API_URL}/api/users/${inForPopup.idUser}`)
           setDataUser(res.data)
+          setInitialData(JSON.parse(JSON.stringify(res.data))) // tạo bản sao dữ liệu để check khi update
           return
     }
  

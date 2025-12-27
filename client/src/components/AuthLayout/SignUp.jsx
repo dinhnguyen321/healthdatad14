@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-// import logo from "../../assets/logo.jpg"
 import axios from 'axios';
 const SignUp = () => {
     const API_URL = import.meta.env.VITE_API_URL
     const [data,setData] = useState({})
     const [textValid,setTextValid] = useState({
-        textEmail:"",
+        textSHQN:"",
         textPassword:""
     })
     const onChangeInput = (e) => {
@@ -13,36 +12,42 @@ const SignUp = () => {
         const {name, value} = e.target
         setData((prev)=>({...prev,[name]:value}))
     }
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    // const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     // Mật khẩu: 8-10 ký tự, ít nhất 1 chữ cái (a-z) và 1 chữ số (0-9)
     const passwordRegex = /^(?=.*[a-z])(?=.*\d)[a-z\d]{8,10}$/i;
     const validateForm = () => {
         let isValid = true;
         // reset trước khi valid
         setTextValid({
-            textEmail: "",
+            // textEmail: "",
+            textSHQN: "",
             textPassword: "",
             textName:""
         });
-        // Kiểm tra name
+
         if(!data.name){
             const messageN = 'Tên không được để trống';
             setTextValid((prev)=>({...prev,textName:messageN}))  
             isValid = false
         }
 
-        // Kiểm tra email
-        if(!data.email){
-            const messageE = 'Email không được để trống';
-            setTextValid((prev)=>({...prev,textEmail:messageE}))  
-            isValid = false
-        }else if(!emailRegex.test(data.email)){
-            const messageE = 'Email không hợp lệ';
-            setTextValid((prev)=>({...prev,textEmail:messageE}))  
+           if(!data.SHQN){
+            const messageN = 'SHQN không được để trống';
+            setTextValid((prev)=>({...prev,textSHQN:messageN}))  
             isValid = false
         }
+        // Kiểm tra email
+        // if(!data.email){
+        //     const messageE = 'Email không được để trống';
+        //     setTextValid((prev)=>({...prev,textEmail:messageE}))  
+        //     isValid = false
+        // }else if(!emailRegex.test(data.email)){
+        //     const messageE = 'Email không hợp lệ';
+        //     setTextValid((prev)=>({...prev,textEmail:messageE}))  
+        //     isValid = false
+        // }
      
-        // Kiểm tra mặt khẩu
+        // Kiểm tra mật khẩu
         if(!data.password){
             const messageP = 'Mật khẩu không được để trống';
              setTextValid((prev)=>({...prev,textPassword:messageP}))  
@@ -67,7 +72,7 @@ const SignUp = () => {
     const handleSignup = async(e) => {
         e.preventDefault();
         const dataRegister = {
-                email:data.email,
+                SHQN:String(data.SHQN),
                 password:data.password,
                 role:"user",
                 name:data.name
@@ -122,19 +127,19 @@ const SignUp = () => {
                   </div>
                   
                   <div>
-                      <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-700">Địa chỉ Email</label>
+                      <label htmlFor="SHQN" className="block mb-2 text-sm font-medium text-gray-700">SHQN</label>
                       <input 
                       onChange={(e)=>onChangeInput(e)}
-                      type="email" 
-                      name="email" 
-                      id="email" 
+                      type="text" 
+                      name="SHQN" 
+                      id="SHQN" 
                       className="text-sm rounded-lg focus:ring-amber-600 focus:border-primary-600 block w-full p-2.5 bg-gray-300 border-gray-700 placeholder-gray-400 text-black"
-                       placeholder="tranvana@gmail.com" 
+                       placeholder="123456789" 
                       required=""/>
                         {
-                        textValid.textEmail ? (
+                        textValid.textSHQN ? (
                         <p className="mt-2 text-red-500 rounded text-sm font-semibold">
-                        {textValid.textEmail}
+                        {textValid.textSHQN}
                         </p>
                         ):""
                       }

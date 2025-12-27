@@ -1,5 +1,5 @@
 export function SkeletonTable() {
-  const skeletonRows = Array.from({ length: 5 });
+  const skeletonRows = Array.from({ length: 10 });
 
   return (
   <tbody>

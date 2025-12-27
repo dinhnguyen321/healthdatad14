@@ -12,8 +12,8 @@ function Carousel() {
             slidesPerView={1}
             pagination={{clickable:true}}
             navigation
-            onSlideChange={()=>console.log("slide change")}
-            onSwiper={(swiper) => console.log(swiper)}
+            // onSlideChange={()=>console.log("slide change")}
+            // onSwiper={(swiper) => console.log(swiper)}
             autoplay={{ delay: 3000 }}
             className="w-3/4 overflow-hidden"
         >

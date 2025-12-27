@@ -98,21 +98,21 @@ export const getAllUsers = async (req, res) => {
       });
     }
   }
-const checkUserExist = async(email) => {
-       const checkUser = await prisma.user.findUnique({ where: { email:email } });
+const checkUserExist = async(SHQN) => {
+       const checkUser = await prisma.user.findUnique({ where: { SHQN:SHQN } });
       return !!checkUser 
 }
 
   // Tạo user mới
   export const createUser = async (req, res) => {
     const dataCreate = req.body
-    const exist = await checkUserExist(dataCreate.email)
+    const exist = await checkUserExist(dataCreate.SHQN)
     try {
         if(exist){
         return  res.status(302).json({message:"Người dùng này đã tồn tại"})
         }
       // kiểm tra input
-      if (!dataCreate.email || !dataCreate.password) {
+      if (!dataCreate.SHQN || !dataCreate.password) {
         return res.status(400).json({ message: "Thiếu thông tin bắt buộc" });
       }
       Object.keys(dataCreate).forEach((key) => {
@@ -207,7 +207,6 @@ export const updateMedicalProfile = async (req, res) => {
     try {
       const id = req.params.id;
       const dataUpdate = req.body;
-      console.log("dataUpdate.avt,",dataUpdate);
       
       if (Object.keys(dataUpdate).length === 0) {
         return res.status(400).json({ message: "Không có dữ liệu để cập nhật" });
@@ -303,6 +302,8 @@ export const updateMedicalProfile = async (req, res) => {
           phone:true,
           position:true,
           rank:true,
+          birth_day:true,
+          enlistment_date:true,
           medicalProfile:true
       }
     });

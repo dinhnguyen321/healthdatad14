@@ -1,69 +1,79 @@
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/20/solid'
 
-export default function Pagination({pagination, setPage }) {
+export default function Pagination({pagination, setPage, page}) {
+    const {totalPages} = pagination;
+    
+    // Hàm xử lý chuyển trang
+    const handlePageChange = (newPage) => {
+      if (newPage >= 1 && newPage <= totalPages) {
+        setPage(newPage);
+      }
+    };
+    const renderPages = () => {
+    const pages = [];
+    const range = 2; // Số lượng trang hiển thị quanh trang hiện tại
+
+    for (let i = 1; i <= totalPages; i++) {
+      if (
+        i === 1 || 
+        i === totalPages || 
+        (i >= page - range && i <= page + range)
+      ) {
+        pages.push(
+          <div key={i} className="relative inline-flex flex-col items-center">
+            {/* Thanh indicator màu xanh khi active */}
+            {page === i && (
+              <div className="absolute top-[-13px] h-0.5 w-full bg-blue-600 transition-all"></div>
+            )}
+            <button
+              onClick={() => handlePageChange(i)}
+              className={`px-4 py-2 text-sm font-semibold transition-colors ${
+                page === i ? 'text-blue-600' : 'text-gray-900 hover:text-blue-500'
+              }`}
+            >
+              {i}
+            </button>
+          </div>
+        );
+      } else if (i === page - range - 1 || i === page + range + 1) {
+        pages.push(
+          <span key={i} className="px-4 py-2 text-sm font-semibold text-gray-500">
+            ...
+          </span>
+        );
+      }
+    }
+    return pages;
+  };
   return (
-    <div className="flex items-center justify-between border-t border-white/10 px-4 py-3 sm:px-6">
-      <div className="flex flex-1 justify-between sm:hidden">
-        <a
-          href="#"
-          className="relative inline-flex items-center rounded-md border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-gray-200 hover:bg-white/10"
-        >
-          Previous
-        </a>
-        <a
-          href="#"
-          className="relative ml-3 inline-flex items-center rounded-md border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-gray-200 hover:bg-white/10"
-        >
-          Next
-        </a>
-      </div>
-      <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
+    <div className="flex items-center justify-between border-t border-gray-400 mt-5 px-4 py-3 sm:px-6">
+      <div className="flex items-center justify-between w-full">
         <div>
-          <p className="text-sm text-gray-800">
-            Hiển thị trang <span className="font-medium">1</span> / <span className="font-medium">{pagination ? pagination.totalPages : ""}</span> trong số {' '}
-            <span className="font-medium">{pagination ? pagination.total : ""}</span> quân nhân
-          </p>
+          <button
+          onClick={() => handlePageChange(page - 1)}
+          disabled={page === 1}
+          className={`relative inline-flex items-center px-4 py-2 text-sm font-medium transition-colors ${
+            page === 1 ? 'text-gray-300 cursor-not-allowed' : 'text-gray-500 hover:text-gray-700'
+          }`}
+            >
+              <ChevronLeftIcon aria-hidden="true" className="size-5" />
+            </button>
+        </div>
+        <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-center">
+          <nav className="isolate inline-flex -space-x-px" aria-label="Pagination">
+            {renderPages()}
+          </nav>
         </div>
         <div>
-          <nav aria-label="Pagination" className="isolate inline-flex -space-x-px rounded-md">
-            <a
-            onClick={()=>setPage(prev => Math.max(prev - 1,1))} 
-              href="#"
-              className="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 inset-ring inset-ring-gray-700 hover:bg-white/5 focus:z-20 focus:outline-offset-0"
-            >
-              <span className="sr-only">Previous</span>
-              <ChevronLeftIcon aria-hidden="true" className="size-5" />
-            </a>
-            {/* Current: "z-10 text-white focus-visible:outline-2 focus-visible:outline-offset-2 bg-indigo-500 focus-visible:outline-indigo-500", Default: "inset-ring focus:outline-offset-0 text-gray-200 inset-ring-gray-700 hover:bg-white/5" */}
-            <a
-              href="#"
-              aria-current="page"
-              className="relative z-10 inline-flex items-center bg-indigo-500 px-4 py-2 text-sm font-semibold text-white focus:z-20 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
-            >
-              {pagination ? pagination.page : ""}
-            </a>
-            
-            {/* <span className="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-400 inset-ring inset-ring-gray-700 focus:outline-offset-0">
-              ...
-            </span> */}
-           
-            {/* <a
-              href="#"
-              className="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-800 inset-ring inset-ring-gray-700 hover:bg-white/5 focus:z-20 focus:outline-offset-0"
-            >
-              {pagination ? pagination.totalPages : ""}
-            </a> */}
-            <a
-              onClick={()=>setPage(prev => prev + 1)} 
-              href="#"
-              className={`relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 inset-ring inset-ring-gray-700 hover:bg-white/5 focus:z-20 focus:outline-offset-0
-                `}
-                // ${page ===pagination.totalPages}
-            >
-              <span className="sr-only">Next</span>
-              <ChevronRightIcon aria-hidden="true" className="size-5" />
-            </a>
-          </nav>
+              <button
+                onClick={() => handlePageChange(page + 1)}
+              disabled={page === totalPages}
+              className={`relative inline-flex items-center px-4 py-2 text-sm font-medium transition-colors ${
+                page === totalPages ? 'text-gray-300 cursor-not-allowed' : 'text-gray-500 hover:text-gray-700'
+              }`}
+              >
+                <ChevronRightIcon aria-hidden="true" className="size-5" />
+              </button>
         </div>
       </div>
     </div>

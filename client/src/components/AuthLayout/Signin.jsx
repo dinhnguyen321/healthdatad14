@@ -14,11 +14,11 @@ const Signin = () => {
     }
     const signIn = async() => {
             const data = {
-              email:dataSignIn.email,
+              SHQN:String(dataSignIn.SHQN),
               password:dataSignIn.password
             }
             try {
-              if(data.email || data.password){
+              if(data.SHHQ || data.password){
                const signinUser = await axios.post(`${API_URL}/account/signin`,data)
                localStorage.setItem("name", signinUser.data.name),
                   localStorage.setItem("idUser", signinUser.data.idUser),
@@ -45,11 +45,11 @@ const Signin = () => {
               </div>
               <form action="" method="POST" className="space-y-6">
                 <div>
-                  <label htmlFor="email" 
+                  <label htmlFor="SHQN" 
                   className="block text-sm/6 font-medium text-gray-700">
-                    Địa chỉ Email</label>
+                    SHQN</label>
                   <div className="mt-2">
-                    <input onChange={onChangeDataSignIn} id="email" type="email" name="email" required autoComplete="email" className="text-sm rounded-lg focus:ring-amber-600 focus:border-primary-600 block w-full p-2.5 bg-gray-300 border-gray-700 placeholder-gray-400 text-black" />
+                    <input onChange={onChangeDataSignIn} id="SHQN" type="text" name="SHQN" required autoComplete="SHQN" className="text-sm rounded-lg focus:ring-amber-600 focus:border-primary-600 block w-full p-2.5 bg-gray-300 border-gray-700 placeholder-gray-400 text-black" />
                   </div>
                 </div>
             

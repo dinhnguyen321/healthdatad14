@@ -3,16 +3,17 @@ import {prisma} from "../models/prismaClient.js";
 
   // Tạo user mới
   export const register = async (req, res) => {
-    const {email, password, role, name} = req.body
+    const {SHQN, password, role, name} = req.body
     
-    const exist = await checkUserExist(email)
+    const exist = await checkUserExist(SHQN)
+
     try {
       if(exist){
         return  res.status(302).json({message:"Người dùng này đã tồn tại"})
       }
       
       // kiểm tra input
-      if (!email || !password || !role || !name) {
+      if (!SHQN || !password || !role || !name) {
       return res.status(400).json({ message: "Thiếu thông tin bắt buộc" });
       }
 
@@ -20,7 +21,7 @@ import {prisma} from "../models/prismaClient.js";
       
       const user = await prisma.user.create({
         data: {
-          email, 
+          SHQN, 
           password:hashPassword, 
           role, 
           name,
@@ -31,7 +32,7 @@ import {prisma} from "../models/prismaClient.js";
         select:{
           idUser:true,
           name:true,
-          email:true,
+          SHQN:true,
           role:true
         }
       });
@@ -44,14 +45,14 @@ import {prisma} from "../models/prismaClient.js";
 
 export const signIn= async (req, res) => {
   try {
-    const {email, password} = req.body 
-    
-    if(!email && !password){
-      return res.status(400).json({ message: "Thiếu email hoặc mật khẩu" });
+    const {SHQN, password} = req.body 
+      
+    if(!SHQN && !password){
+      return res.status(400).json({ message: "Thiếu SHQN hoặc mật khẩu" });
     }
   
         const users = await prisma.user.findUnique({
-          where:{ email:email}
+          where:{ SHQN:SHQN}
         });
 
         if(!users){
@@ -78,7 +79,7 @@ export const signIn= async (req, res) => {
     }
   };
 
-  const checkUserExist = async(email) => {
-       const checkUser = await prisma.user.findUnique({ where: { email:email } });
+  const checkUserExist = async(SHQN) => {
+       const checkUser = await prisma.user.findUnique({ where: { SHQN:SHQN } });
         return !!checkUser 
   }

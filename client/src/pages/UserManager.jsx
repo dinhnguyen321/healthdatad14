@@ -42,6 +42,7 @@ function UserManager() {
                 console.log("error: ",error);
         }
 }   
+
 const handleSelectOne = (idUser) => {
     setSelectedIds((prev)=> 
         prev.includes(idUser) 
@@ -71,8 +72,8 @@ const handleSelectOne = (idUser) => {
                     )
                 } else {
                     await axios.delete(`${API_URL}/api/users/${selectedIds[0]}`)
-                    .then((res)=>{
-                        console.log(res.data);
+                    .then(()=>{
+                        toast.success('Đã xóa 1 người dùng thành công!')
                     }).catch((err)=>{
                         console.error("Lỗi xóa 1 người dùng:", err);
                     })
@@ -86,10 +87,10 @@ const handleSelectOne = (idUser) => {
                 toast.error('Xóa thất bại!', { Id: loadingToast });
                 toast.dismiss(loadingToast);
             }
-            
     }
     
 const handleSearch = async () => {
+    const loadingToast = toast.loading('Đang tìm người dùng...'); 
     try {
         const res = await axios.get(
         `${API_URL}/api/users/search`,{
@@ -101,7 +102,11 @@ const handleSearch = async () => {
             }
         }
       );
-      setDataUser(res.data);
+      if(res.status === 200){
+          setDataUser(res.data);   
+          toast.dismiss(loadingToast);
+      }
+      toast.dismiss(loadingToast);
     } catch (err) {
       console.error("Search error:", err);
     }
@@ -173,15 +178,15 @@ useEffect(()=>{
                 {
                 isLoading ? <SkeletonTable/> :(
                 <tbody>
-                    {dataUser.users.length === 0 ? (
+                    {dataUser.users?.length === 0 ? (
                         <tr>
                         <td colSpan={8} className='text-center font-bold py-4'>
                             Tên người dùng không có trong danh sách 
                         </td>
                         </tr>  
                         ) : 
-                        dataUser.users.map((item,key)=>(
-                        <tr key={key}>
+                        dataUser.users?.map((item,key)=>(
+                        <tr key={key} >
                         <td className='border-b text-center px-1 py-2'>
                             <input type="checkbox" 
                             name={item.idUser}
@@ -191,7 +196,15 @@ useEffect(()=>{
                              onChange={()=>handleSelectOne(item.idUser)}
                              />
                         </td>
-                        <td className='border-b text-start px-1 py-2'>
+                        <td className='border-b text-start px-1 py-2 cursor-pointer'
+                        onClick={()=>{
+                              setInForPopup({
+                                title:"detail",
+                                idUser: item.idUser
+                            }),
+                            setShowPopup(!showPopup)
+                        }}
+                        >
                             <div className='flex items-center gap-x-2'>
                                 <div>
                                     <img
@@ -199,21 +212,18 @@ useEffect(()=>{
                                     src={`${ item.avt ? item.avt : "https://res.cloudinary.com/dssyoikpk/image/upload/v1766493367/z7192639253857_35218d5daa47f331e561cea0993af9ec_uv7epe.jpg"}`} alt="avt" />
                                 </div>
                                 <div>
-                                    <p className='font-extrabold'>{item.name}</p>
+                                    <p className='font-extrabold hover:underline hover:underline-offset-4'>{item.name}</p>
                                     <span className='font-sans font-normal'>SHQN: {item.SHQN}</span>
                                 </div>
                             </div>
-                            
-                            </td>
-                        <td className='border-b text-start px-1 py-2'>{format(new Date(item.enlistment_date), 'MM/yyyy')}</td>
-                        <td className='border-b text-start px-1 py-2'>{format(new Date(item.birth_day), 'dd/MM/yyyy')}</td>
+                        </td>
+                        <td className='border-b text-start px-1 py-2'>{item.enlistment_date ? format(new Date(item.enlistment_date), 'MM/yyyy') : ""}</td>
+                        <td className='border-b text-start px-1 py-2'>{item.birth_day ? format(new Date(item.birth_day), 'dd/MM/yyyy') : ""}</td>
                         <td className='border-b text-start px-1 py-2'>{item.rank}</td>
                         <td className='border-b text-start px-1 py-2'>{item.position}</td>
                         <td className='border-b text-start px-1 py-2'>{item.department}</td>
                         <td className='border-b text-center px-1 py-2'>
-                            <div className=''>
-                            <DropdownCRUD item={item} setInForPopup={setInForPopup} setShowPopup={setShowPopup} showPopup={showPopup}/>
-                            </div>
+                            <DropdownCRUD setSelectedIds={setSelectedIds} item={item} setInForPopup={setInForPopup} setShowPopup={setShowPopup} showPopup={showPopup}/>
                         </td>
                     </tr>
                     ))}
@@ -221,7 +231,11 @@ useEffect(()=>{
                 )}
                 </table>
                 <div>
-                    <Pagination pagination={dataUser.pagination} setPage={setPage} page={page}/>
+                    {
+                        dataUser.pagination ? (
+                            <Pagination pagination={dataUser.pagination} setPage={setPage} page={page}/>
+                        ): ""
+                    }
                 </div>
         </div>
  {

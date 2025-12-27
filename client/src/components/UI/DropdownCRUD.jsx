@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import {TransitionGroup, CSSTransition, } from "react-transition-group";
-function DropdownCRUD({setShowPopup,setInForPopup,showPopup,item}) {
+function DropdownCRUD({setShowPopup,setInForPopup,showPopup,item,setSelectedIds}) {
     const [show, setShow] = useState(false)
     const nodeRef = useRef(null);
     const role = localStorage.getItem("role")
@@ -40,27 +40,27 @@ function DropdownCRUD({setShowPopup,setInForPopup,showPopup,item}) {
             <CSSTransition classNames="fade" nodeRef={nodeRef} timeout={300} in={show} unmountOnExit >
                 <div ref={dropdownRef} className='rounded-xl absolute top-6 right-0 bg-white p-4 flex flex-col space-y-2 w-[300px] z-20'>
                          { role === "user" ? "" : ( 
-                                <>
-                            <button 
-                            onClick={()=>(
+                            <>
+                                <button 
+                                onClick={()=>(
                                     setInForPopup({
                                         title:"edit",
                                         idUser: item.idUser
                                     }),
                                     setShowPopup(!showPopup)
-                                )}
-                                className='text-black hover:bg-gray-300 hover:text-gray-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-2 py-2.5 text-center flex items-center gap-x-2' title='Chỉnh sửa'>
-                                <svg className='h-4 w-4 lg:h-6 lg:w-6' 
-                                viewBox="-1 -3 24 24" 
-                                version="1.1" 
-                                xmlns="http://www.w3.org/2000/svg" 
-                                xmlnsXlink="http://www.w3.org/1999/xlink"fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>edit [#1479]</title> <desc>Created with Sketch.</desc> <defs> </defs> <g id="Page-1" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd"> <g id="Dribbble-Light-Preview" transform="translate(-99.000000, -400.000000)" 
-                                fill="#000000"> <g id="icons" transform="translate(56.000000, 160.000000)"> <path d="M61.9,258.010643 L45.1,258.010643 L45.1,242.095788 L53.5,242.095788 L53.5,240.106431 L43,240.106431 L43,260 L64,260 L64,250.053215 L61.9,250.053215 L61.9,258.010643 Z M49.3,249.949769 L59.63095,240 L64,244.114985 L53.3341,254.031929 L49.3,254.031929 L49.3,249.949769 Z" id="edit-[#1479]"> </path> </g> </g> </g> </g></svg>
-                                <p>
-                                    Chỉnh sửa hồ sơ
-                                </p>
-                            </button>
-                        </>
+                                    )}
+                                    className='text-black hover:bg-gray-300 hover:text-gray-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-2 py-2.5 text-center flex items-center gap-x-2' title='Chỉnh sửa'>
+                                    <svg className='h-4 w-4 lg:h-6 lg:w-6' 
+                                    viewBox="-1 -3 24 24" 
+                                    version="1.1" 
+                                    xmlns="http://www.w3.org/2000/svg" 
+                                    xmlnsXlink="http://www.w3.org/1999/xlink"fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>edit [#1479]</title> <desc>Created with Sketch.</desc> <defs> </defs> <g id="Page-1" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd"> <g id="Dribbble-Light-Preview" transform="translate(-99.000000, -400.000000)" 
+                                    fill="#000000"> <g id="icons" transform="translate(56.000000, 160.000000)"> <path d="M61.9,258.010643 L45.1,258.010643 L45.1,242.095788 L53.5,242.095788 L53.5,240.106431 L43,240.106431 L43,260 L64,260 L64,250.053215 L61.9,250.053215 L61.9,258.010643 Z M49.3,249.949769 L59.63095,240 L64,244.114985 L53.3341,254.031929 L49.3,254.031929 L49.3,249.949769 Z" id="edit-[#1479]"> </path> </g> </g> </g> </g></svg>
+                                    <p>
+                                        Chỉnh sửa hồ sơ
+                                    </p>
+                                </button>
+                            </>
                             )}
                             <button 
                             onClick={()=>(
@@ -81,7 +81,43 @@ function DropdownCRUD({setShowPopup,setInForPopup,showPopup,item}) {
                                 <p>
                                     Chi tiết người dùng
                                 </p>
-                            </button>  
+                            </button> 
+
+                            { role === "user" ? "" : ( 
+                            <>
+                            <button 
+                            onClick={()=>{
+                            setSelectedIds([item.idUser]),
+                            setInForPopup({
+                            title:"delete",
+                            idUser: item.idUser
+                            }),
+                            console.log({
+                                title:"delete",
+                                idUser: item.idUser
+                            }
+                            );
+                            
+                            setShowPopup(!showPopup)
+                            }}
+                            className='text-black hover:bg-gray-300 hover:text-gray-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-2 py-2.5 text-center flex items-center gap-x-2  
+                            '>
+                                <svg className='h-4 w-4 lg:h-6 lg:w-6' viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
+                                                <g id="SVGRepo_iconCarrier"> <path d="M10 12V17" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                </path>
+                                                <path d="M14 12V17" stroke="#000000" stroke-width="2" stroke-linecap="round" strokeLinejoin="round"></path> 
+                                                <path d="M4 7H20" stroke="#000000" stroke-width="2" strokeLinecap="round" strokeLinejoin="round"></path>
+                                                <path d="M6 10V18C6 19.6569 7.34315 21 9 21H15C16.6569 21 18 19.6569 18 18V10" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path> 
+                                                <path d="M9 5C9 3.89543 9.89543 3 11 3H13C14.1046 3 15 3.89543 15 5V7H9V5Z" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path> 
+                                                </g>
+                                </svg>
+                                <p>
+                                    Xóa người dùng
+                                </p>
+                            </button>
+                            </>
+                            )} 
                 </div>
             </CSSTransition>       
         </div>

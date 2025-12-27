@@ -11,7 +11,7 @@ datasource db {
 model User {
   idUser          String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name            String
-  email           String          @unique
+  email           String?         @unique
   phone           String?         @unique
   address         String?
   password        String
@@ -30,7 +30,7 @@ model User {
   created_at      DateTime        @default(now())
   updated_at      DateTime        @updatedAt
   avt             String?         @db.VarChar(1000)
-  SHQN            String?         @db.VarChar
+  SHQN            String          @db.VarChar
   medicalProfile  MedicalProfile?
 
   @@map("users")
