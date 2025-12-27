@@ -1,35 +1,36 @@
 import React, { useState } from 'react';
 import axios from "axios"
-import { Bounce, ToastContainer } from 'react-toastify';
-import { toast } from 'react-toastify';
+import { Bounce, ToastContainer, toast } from 'react-toastify';
 
 const Signin = () => {
     const API_URL = import.meta.env.VITE_API_URL
-    console.log("API_URL",API_URL);
-    
     const [dataSignIn, setDataSignIn] = useState({})
     const onChangeDataSignIn = (e) => {
         const {name, value} = e.target
         setDataSignIn((prev)=> ({...prev,[name]:value}) )
     }
     const signIn = async() => {
+      const loadingToast = toast.loading("Đang đăng nhập...")    
             const data = {
               SHQN:String(dataSignIn.SHQN),
               password:dataSignIn.password
             }
             try {
               if(data.SHHQ || data.password){
-               const signinUser = await axios.post(`${API_URL}/account/signin`,data)
-               localStorage.setItem("name", signinUser.data.name),
+              const signinUser = await axios.post(`${API_URL}/account/signin`,data)
+                  localStorage.setItem("name", signinUser.data.name),
                   localStorage.setItem("idUser", signinUser.data.idUser),
                   localStorage.setItem("role", signinUser.data.role),
                   localStorage.setItem("avt", signinUser.data.avt),
+                  toast.success(`Xin chào ${signinUser.data.name}`,{Id: loadingToast})
+                  toast.dismiss(loadingToast)
                   window.location.reload()
-                toast.success(`Xin chào ${signinUser.data.name}`)
               }
             } catch (error) {
               console.log("error singin: ",error.response.data.message);
               toast.error(error.response.data.message)
+              toast.dismiss(loadingToast)
+              toast.error(`Đăng nhập không thành công`,{Id: loadingToast})
             }
     }
     return (
@@ -88,20 +89,20 @@ const Signin = () => {
             className='w-60 h-40 object-fill' />
         </div>
         
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick={false}
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+          transition={Bounce}
+        />
         </div>
     );
 };
-    <ToastContainer
-      position="top-right"
-      autoClose={5000}
-      hideProgressBar={false}
-      newestOnTop={false}
-      closeOnClick={false}
-      rtl={false}
-      pauseOnFocusLoss
-      draggable
-      pauseOnHover
-      theme="light"
-      transition={Bounce}
-    />
 export default Signin;

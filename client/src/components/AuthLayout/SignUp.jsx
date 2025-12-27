@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
 import axios from 'axios';
+import React, { useState } from 'react';
+import { Bounce, ToastContainer, toast } from 'react-toastify';
+
 const SignUp = () => {
     const API_URL = import.meta.env.VITE_API_URL
     const [data,setData] = useState({})
@@ -71,20 +73,22 @@ const SignUp = () => {
     }
     const handleSignup = async(e) => {
         e.preventDefault();
+        const loadingToast = toast.loading("Đang đăng ký người dùng...")
         const dataRegister = {
                 SHQN:String(data.SHQN),
                 password:data.password,
                 role:"user",
                 name:data.name
             }
-          
             try {
                 if(validateForm()){
                 const res = await axios.post(`${API_URL}/account/register`,dataRegister)
                 if(res.data){
+                    toast.dismiss(loadingToast)
+                    toast.success("Đăng ký thành công")
                     setInterval(()=>{
                         window.location.href = "/account/signin"
-                    },1000)
+                    },2000)
                 }
             }
             } catch (error) {
@@ -186,6 +190,19 @@ const SignUp = () => {
               </form>
           </div>
         </div>
+        <ToastContainer
+              position="top-right"
+              autoClose={5000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick={false}
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+              theme="light"
+              transition={Bounce}
+            />
         </section>
     );
 };
