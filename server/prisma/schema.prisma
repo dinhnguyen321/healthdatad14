@@ -29,8 +29,8 @@ model User {
   role            String?
   created_at      DateTime        @default(now())
   updated_at      DateTime        @updatedAt
-  avt             String?         @db.VarChar(1000)
-  SHQN            String          @db.VarChar
+  avt             String?
+  SHQN            String          @unique
   medicalProfile  MedicalProfile?
 
   @@map("users")
