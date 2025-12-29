@@ -10,32 +10,32 @@ const Signin = () => {
         setDataSignIn((prev)=> ({...prev,[name]:value}) )
     }
     const signIn = async() => {
-      const loadingToast = toast.loading("Đang đăng nhập...")    
             const data = {
               SHQN:String(dataSignIn.SHQN),
               password:dataSignIn.password
             }
             try {
               if(data.SHHQ || data.password){
+              const loadingToast = toast.loading("Đang đăng nhập...")    
               const signinUser = await axios.post(`${API_URL}/account/signin`,data)
                   localStorage.setItem("name", signinUser.data.name),
                   localStorage.setItem("idUser", signinUser.data.idUser),
                   localStorage.setItem("role", signinUser.data.role),
                   localStorage.setItem("avt", signinUser.data.avt),
-                  toast.success(`Xin chào ${signinUser.data.name}`,{Id: loadingToast})
                   toast.dismiss(loadingToast)
+                  toast.success(`Xin chào ${signinUser.data.name}`,{Id: loadingToast})
                   window.location.reload()
-              }
+                }
+                toast.warning(`Vui lòng nhập thông tin đăng nhập`)
             } catch (error) {
               console.log("error singin: ",error.response.data.message);
               toast.error(error.response.data.message)
-              toast.dismiss(loadingToast)
-              toast.error(`Đăng nhập không thành công`,{Id: loadingToast})
+              toast.error(`Đăng nhập không thành công`)
             }
     }
     return (
         <div className="grid grid-cols-1 md:grid-cols-10 min-h-screen w-full">
-        <div className='col-span-1 md:col-span-4 flex justify-center items-center w-full shadow border xl:p-0 bg-gray-200'>
+        <div className='h-screen col-span-1 md:col-span-5 flex justify-center items-center w-full shadow border xl:p-0 bg-gray-200'>
             <div className="sm:mx-auto sm:w-full sm:max-w-sm bg-gray-800x p-6 space-y-4 md:space-y-6 sm:p-8 rounded-lg shadow">
               <div className="sm:mx-auto sm:w-full sm:max-w-sm space-y-2">
                 <img src={"https://res.cloudinary.com/dssyoikpk/image/upload/v1766220405/HSSK/img2_udl54h.jpg"} alt="HealthDataD14"
@@ -83,7 +83,7 @@ const Signin = () => {
             </div>
         </div>
         
-        <div className='md:col-span-6 hidden md:flex bg-[#c21e29] justify-center items-center'>
+        <div className='md:col-span-5 hidden md:flex bg-[#c21e29] justify-center items-center'>
             <img 
             src="https://res.cloudinary.com/dssyoikpk/image/upload/v1766246772/HSSK/covietnam_qolyps.png" alt="covietnam"
             className='w-60 h-40 object-fill' />

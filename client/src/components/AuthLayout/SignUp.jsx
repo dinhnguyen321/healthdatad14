@@ -73,7 +73,6 @@ const SignUp = () => {
     }
     const handleSignup = async(e) => {
         e.preventDefault();
-        const loadingToast = toast.loading("Đang đăng ký người dùng...")
         const dataRegister = {
                 SHQN:String(data.SHQN),
                 password:data.password,
@@ -82,6 +81,7 @@ const SignUp = () => {
             }
             try {
                 if(validateForm()){
+                const loadingToast = toast.loading("Đang đăng ký người dùng...")
                 const res = await axios.post(`${API_URL}/account/register`,dataRegister)
                 if(res.data){
                     toast.dismiss(loadingToast)
@@ -90,6 +90,9 @@ const SignUp = () => {
                         window.location.href = "/account/signin"
                     },2000)
                 }
+                toast.dismiss(loadingToast)
+                toast.error("Không thành công vui lòng thử lại!")
+
             }
             } catch (error) {
                 console.log("error signup: ", error);
@@ -98,13 +101,13 @@ const SignUp = () => {
     }
     return (
         <section className="grid grid-cols-1 md:grid-cols-10 min-h-screen w-full">
-       <div className="md:col-span-6 hidden md:flex bg-[#c21e29] justify-center items-center"
+       <div className="h-screen md:col-span-5 hidden md:flex bg-[#c21e29] justify-center items-center"
          >
             <img src="https://res.cloudinary.com/dssyoikpk/image/upload/v1766234784/HSSK/codang_ofoxn8.png" alt="codang"
             className='w-44 h-40 object-fill' />
         </div>
-        <div className="col-span-1 md:col-span-4 flex justify-center items-center w-full shadow border xl:p-0 bg-gray-200">
-          <div className="p-6 space-y-4 md:space-y-6 sm:p-8 sm:max-w-md ">
+        <div className="col-span-1 md:col-span-5 flex justify-center items-center w-full shadow border xl:p-0 bg-gray-200">
+          <div className="p-6 space-y-4 md:space-y-6 sm:p-8 sm:max-w-xl">
               <h1 className=" bg-linear-to-r bg-clip-text uppercase text-transparent from-red-500 via-yellow-600 to-gray-400 text-xl font-bold leading-tight tracking-tight md:text-5xl">
                  Đăng ký tài khoản
                  </h1>
