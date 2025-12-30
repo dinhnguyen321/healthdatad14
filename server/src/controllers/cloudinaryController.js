@@ -7,9 +7,10 @@
 // export const uploadSingle = () = >{
 
 // }
-
-// // export default upload;
 import cloudinary from "../config/cloudinaryConfig.js"; 
+const fs = require("fs")
+const path = require("path")
+const filePath = path.join(__dirname, "../user.json")
 
 export const uploadSingleImage = async (req, res) => {
   try {
@@ -32,4 +33,21 @@ export const uploadSingleImage = async (req, res) => {
     console.error(error);
     res.status(500).json({ message: "Lỗi xử lý upload", error: error.message });
   }
+}
+
+export const registerFaceAPI = (req,res) => {
+    const newUser = req.body
+    console.log("data face api", request);
+
+    // đọc file
+    fs.readFile(filePath, 'utf8', (err, data)=> {
+      let users = []
+
+      if(!err && data){
+        users = JSON.parse(data); // nếu file đã có dữ liệu thì parse ra mảng
+      }
+
+      // push user vào mảnh
+      users.push(newUser)
+    })
 }
