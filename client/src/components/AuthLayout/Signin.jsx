@@ -14,9 +14,14 @@ const Signin = () => {
               SHQN:String(dataSignIn.SHQN),
               password:dataSignIn.password
             }
+            
+            if(!data.password ){
+              toast.warning(`Vui lòng nhập thông tin đăng nhập`) 
+              return
+            } 
+            const loadingToast = toast.loading("Đang đăng nhập...")    
             try {
               if(data.SHHQ || data.password){
-              const loadingToast = toast.loading("Đang đăng nhập...")    
               const signinUser = await axios.post(`${API_URL}/account/signin`,data)
                   localStorage.setItem("name", signinUser.data.name),
                   localStorage.setItem("idUser", signinUser.data.idUser),
@@ -25,8 +30,8 @@ const Signin = () => {
                   toast.dismiss(loadingToast)
                   toast.success(`Xin chào ${signinUser.data.name}`,{Id: loadingToast})
                   window.location.reload()
+                  return
                 }
-                toast.warning(`Vui lòng nhập thông tin đăng nhập`)
             } catch (error) {
               console.log("error singin: ",error.response.data.message);
               toast.error(error.response.data.message)

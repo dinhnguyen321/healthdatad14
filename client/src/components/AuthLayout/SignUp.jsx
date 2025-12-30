@@ -79,9 +79,9 @@ const SignUp = () => {
                 role:"user",
                 name:data.name
             }
+            if(!validateForm()) return
+            const loadingToast = toast.loading("Đang đăng ký người dùng...")
             try {
-                if(validateForm()){
-                const loadingToast = toast.loading("Đang đăng ký người dùng...")
                 const res = await axios.post(`${API_URL}/account/register`,dataRegister)
                 if(res.data){
                     toast.dismiss(loadingToast)
@@ -89,13 +89,13 @@ const SignUp = () => {
                     setInterval(()=>{
                         window.location.href = "/account/signin"
                     },2000)
-                }
-                toast.dismiss(loadingToast)
-                toast.error("Không thành công vui lòng thử lại!")
-
+                    return
+                
             }
             } catch (error) {
                 console.log("error signup: ", error);
+                toast.dismiss(loadingToast)
+                toast.error(`${error.response.data.message}`)
             }
           
     }
@@ -114,7 +114,7 @@ const SignUp = () => {
               <div className='h-1 bg-linear-to-r from-red-500 via-yellow-600 to-gray-400
                 bg-300% animate-gradient-flow'></div>
               <form className="space-y-4 md:space-y-6" action="" onSubmit={(e)=>handleSignup(e)}>
-              <div>
+                <div className="relative">
                       <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-700">Họ và tên</label>
                       <input 
                       onChange={(e)=>onChangeInput(e)}
@@ -126,14 +126,14 @@ const SignUp = () => {
                       required=""/>
                         {
                         textValid.textName ? (
-                        <p className="mt-2 text-red-500 rounded text-sm font-semibold">
+                        <p className="absolute bottom-0 left-0 translate-y-full text-red-500 rounded text-sm font-semibold">
                         {textValid.textName}
                         </p>
                         ):""
                       }
                   </div>
                   
-                  <div>
+                  <div className="relative">
                       <label htmlFor="SHQN" className="block mb-2 text-sm font-medium text-gray-700">SHQN</label>
                       <input 
                       onChange={(e)=>onChangeInput(e)}
@@ -145,13 +145,13 @@ const SignUp = () => {
                       required=""/>
                         {
                         textValid.textSHQN ? (
-                        <p className="mt-2 text-red-500 rounded text-sm font-semibold">
+                        <p className="absolute bottom-0 left-0 translate-y-full text-red-500 rounded text-sm font-semibold">
                         {textValid.textSHQN}
                         </p>
                         ):""
                       }
                   </div>
-                  <div>
+                  <div className="relative">
                       <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-700">Mật khẩu</label>
                       <input 
                       onChange={(e)=>onChangeInput(e)}
@@ -159,7 +159,7 @@ const SignUp = () => {
                       required=""/>
                       {
                         textValid.textPassword ? (
-                        <p className="mt-2 text-red-500 rounded text-sm font-semibold">
+                        <p className="absolute bottom-0 left-0 translate-y-full text-red-500 rounded text-sm font-semibold">
                         {textValid.textPassword}
                         </p>
                         ):("")
@@ -168,7 +168,7 @@ const SignUp = () => {
                                 (8-10 ký tự, ít nhất 1 chữ cái (A-z) và 1 chữ số (0-9))
                         </p>
                   </div>
-                  <div>
+                  <div className="relative">
                       <label htmlFor="confirmPassword" className="block mb-2 text-sm font-medium text-gray-700">Xác nhận mật khẩu</label>
                       <input 
                       onChange={(e)=>onChangeInput(e)}
@@ -176,7 +176,7 @@ const SignUp = () => {
                       required=""/>
                           {
                         textValid.textConfirmPassword ? (
-                        <p className="mt-2 text-red-500 rounded text-sm font-semibold">
+                        <p className="absolute bottom-0 left-0 translate-y-full text-red-500 rounded text-sm font-semibold">
                         {textValid.textConfirmPassword}
                         </p>
                         ):("")
