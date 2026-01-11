@@ -8,9 +8,9 @@
 
 // }
 import cloudinary from "../config/cloudinaryConfig.js"; 
-const fs = require("fs")
-const path = require("path")
-const filePath = path.join(__dirname, "../user.json")
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from 'url'
 
 export const uploadSingleImage = async (req, res) => {
   try {
@@ -35,19 +35,50 @@ export const uploadSingleImage = async (req, res) => {
   }
 }
 
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+
 export const registerFaceAPI = (req,res) => {
     const newUser = req.body
-    console.log("data face api", request);
+    const filePath = path.join(__dirname, "../user.json")
+    console.log("Dữ liệu nhận được", newUser);
+    console.log("filePath", filePath);
 
-    // đọc file
+    // 1 đọc file
     fs.readFile(filePath, 'utf8', (err, data)=> {
       let users = []
 
       if(!err && data){
-        users = JSON.parse(data); // nếu file đã có dữ liệu thì parse ra mảng
+        try {
+          users = JSON.parse(data); // nếu file đã có dữ liệu thì parse ra mảng
+        } catch (error) {
+          users = []          
+        }
       }
 
-      // push user vào mảnh
+      // 2 push user vào mảnh
       users.push(newUser)
+
+      // 3 ghi file lưu vào usb
+      fs.writeFile(filePath, JSON.stringify(users, null, 2), (writeErr) => {
+        if(writeErr){
+          console.error("lỗi ghi file:", writeErr);
+          return res.status(500).json({ message: "Không thể lưu dữ liệu vào USB" });
+        }
+        // 4. Trả lời cho Client
+        res.status(200).json({ message: "Đăng ký khuôn mặt thành công!" });
+      })
     })
+}
+
+export const getAllUsersFace = async (req, res) => {
+    const filePath = path.join(__dirname, "../user.json");
+
+    fs.readFile(filePath, 'utf8', (err, data) => {
+      if(err){
+      return res.status(500).json({ message: "Không đọc được file trên usb" });
+     }
+     // Trả về mảng users để Client xử lý đối soát
+        res.status(200).json(JSON.parse(data || "[]"));
+  })
 }

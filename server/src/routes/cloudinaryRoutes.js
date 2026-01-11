@@ -1,6 +1,6 @@
 import express from "express"
 import multer, { memoryStorage } from 'multer';
-import {uploadSingleImage, registerFaceAPI} from "../controllers/cloudinaryController.js"
+import {uploadSingleImage, registerFaceAPI, getAllUsersFace} from "../controllers/cloudinaryController.js"
 // Sử dụng bộ nhớ tạm (memory storage) để tránh lưu file rác vào server
 // Kiểm tra định dạng file (chỉ cho phép ảnh)
 
@@ -17,4 +17,5 @@ const upload = multer({ storage, fileFilter:fileFilter });
 
 router.post("/", upload.single('image'),uploadSingleImage )
 router.post("/faceapi", registerFaceAPI)
+router.get("/faceapi", getAllUsersFace)
 export default router
