@@ -35,13 +35,13 @@ function Dashboard() {
                     </div>
                 <UserChart/>
                 </div> */}
-                <div className='w-[20%] rounded-lg overflow-hidden'>
+                <div className='lg:block hidden w-[20%] rounded-lg overflow-hidden'>
                     <img src="https://res.cloudinary.com/dssyoikpk/image/upload/v1766220406/HSSK/img4_zcci8j.jpg" 
                     className='h-[500px]'
                     alt="" />
                 </div>
                 <Carousel/>
-                <div className='w-[20%] rounded-lg overflow-hidden '>
+                <div className='lg:block hidden w-[20%] rounded-lg overflow-hidden '>
                     <img src="https://res.cloudinary.com/dssyoikpk/image/upload/v1766220408/HSSK/img5_mkd8sg.jpg" 
                     className='h-[500px]'
                     alt="" />

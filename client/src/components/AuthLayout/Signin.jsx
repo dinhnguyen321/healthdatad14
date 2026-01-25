@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import axios from "axios"
 import { Bounce, ToastContainer, toast } from 'react-toastify';
 
@@ -14,15 +14,15 @@ const Signin = () => {
               SHQN:String(dataSignIn.SHQN),
               password:dataSignIn.password
             }
-            
-            if(!data.password ){
+
+            if(!data.password && !data.SHHQ){
               toast.warning(`Vui lòng nhập thông tin đăng nhập`) 
               return
             } 
             const loadingToast = toast.loading("Đang đăng nhập...")    
             try {
-              if(data.SHHQ || data.password){
               const signinUser = await axios.post(`${API_URL}/account/signin`,data)
+              console.log("signinUser",signinUser);
                   localStorage.setItem("name", signinUser.data.name),
                   localStorage.setItem("idUser", signinUser.data.idUser),
                   localStorage.setItem("role", signinUser.data.role),
@@ -31,11 +31,11 @@ const Signin = () => {
                   toast.success(`Xin chào ${signinUser.data.name}`,{Id: loadingToast})
                   window.location.reload()
                   return
-                }
             } catch (error) {
               console.log("error singin: ",error.response.data.message);
+              toast.dismiss(loadingToast)
               toast.error(error.response.data.message)
-              toast.error(`Đăng nhập không thành công`)
+              // toast.error(`Đăng nhập không thành công`)
             }
     }
     return (

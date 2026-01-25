@@ -119,7 +119,7 @@ useEffect(()=>{
   return (
         <div className='mx-auto text-black w-3/4 font-semibold' >
              <div className='flex lg:flex-row flex-col justify-between items-center'>
-                <p className='text-xl uppercase '>
+                <p className='text-xl uppercase pb-2'>
                  Danh sách quân nhân Tiểu Đoàn
                 </p>
 
@@ -167,17 +167,17 @@ useEffect(()=>{
                     <tr>
                     <th></th>
                     <th className='text-start px-1 py-2'>Họ và Tên</th>
-                    <th className='text-start px-1 py-2'>Nhập ngũ</th>
-                    <th className='text-start px-1 py-2'>Năm sinh</th>
-                    <th className='text-start px-1 py-2'>Cấp bậc</th>
-                    <th className='text-start px-1 py-2'>Chức Vụ</th>
-                    <th className='text-start px-1 py-2'>Đơn vị</th>
+                    <th className='text-start lg:table-cell hidden px-1 py-2'>Nhập ngũ</th>
+                    <th className='text-start lg:table-cell hidden px-1 py-2'>Năm sinh</th>
+                    <th className='text-start lg:table-cell hidden px-1 py-2'>Cấp bậc</th>
+                    <th className='text-start lg:table-cell hidden px-1 py-2'>Chức Vụ</th>
+                    <th className='text-start lg:table-cell hidden px-1 py-2'>Đơn vị</th>
                     <th className='text-start px-1 py-2'></th>
                     </tr>
                 </thead>
                 {
                 isLoading ? <SkeletonTable/> :(
-                <tbody>
+                <tbody className=''>
                     {dataUser.users?.length === 0 ? (
                         <tr>
                         <td colSpan={8} className='text-center font-bold py-4'>
@@ -217,11 +217,11 @@ useEffect(()=>{
                                 </div>
                             </div>
                         </td>
-                        <td className='border-b text-start px-1 py-2'>{item.enlistment_date ? format(new Date(item.enlistment_date), 'MM/yyyy') : ""}</td>
-                        <td className='border-b text-start px-1 py-2'>{item.birth_day ? format(new Date(item.birth_day), 'dd/MM/yyyy') : ""}</td>
-                        <td className='border-b text-start px-1 py-2'>{item.rank}</td>
-                        <td className='border-b text-start px-1 py-2'>{item.position}</td>
-                        <td className='border-b text-start px-1 py-2'>{item.department}</td>
+                        <td className='border-b lg:table-cell hidden text-start px-1 py-2'>{item.enlistment_date ? format(new Date(item.enlistment_date), 'MM/yyyy') : ""}</td>
+                        <td className='border-b lg:table-cell hidden text-start px-1 py-2'>{item.birth_day ? format(new Date(item.birth_day), 'dd/MM/yyyy') : ""}</td>
+                        <td className='border-b lg:table-cell hidden text-start px-1 py-2'>{item.rank}</td>
+                        <td className='border-b lg:table-cell hidden text-start px-1 py-2'>{item.position}</td>
+                        <td className='border-b lg:table-cell hidden text-start px-1 py-2'>{item.department}</td>
                         <td className='border-b text-center px-1 py-2'>
                             <DropdownCRUD setSelectedIds={setSelectedIds} item={item} setInForPopup={setInForPopup} setShowPopup={setShowPopup} showPopup={showPopup}/>
                         </td>

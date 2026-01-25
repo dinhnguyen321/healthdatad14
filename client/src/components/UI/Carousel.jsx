@@ -15,7 +15,7 @@ function Carousel() {
             // onSlideChange={()=>console.log("slide change")}
             // onSwiper={(swiper) => console.log(swiper)}
             autoplay={{ delay: 3000 }}
-            className="w-3/4 overflow-hidden"
+            className="lg:w-3/4 w-full overflow-hidden"
         >
             <SwiperSlide><img className="object-cover mx-auto w-full h-[500px]" src="https://binhminh.edu.vn/uploads/thumb/tho-ve-ngay-22-12-7-071140.jpg" alt="" /></SwiperSlide>
             <SwiperSlide><img className="object-cover mx-auto w-full h-[500px]" src="https://a.tcnn.vn//Upload/Images/Normal/2025/12/d9c3a07340c21515d5748e6ea45a8a25-81-nam-QD.jpg" alt="" /></SwiperSlide>

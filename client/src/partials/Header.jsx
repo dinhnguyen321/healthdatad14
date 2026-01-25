@@ -44,13 +44,14 @@ function Header({sidebarOpen,setSidebarOpen,profileUser}) {
         ></div>
         <div id='sidebar' 
           ref={sidebar}
-          className={`flex lg:flex-row flex-col items-center justify-between transition-all duration-200 ease-in-out z-40 h-full
+          className={`flex items-center justify-between transition-all duration-200 ease-in-out z-40 h-full
             ${variant === 'v2' ? 'border-r border-gray-200 dark:border-gray-700/60' : 'shadow-xs'}
             `}>
               {/* ${sidebarOpen ? "bg-red-600" : ""}  */}
       {/* Hamburger button */}
           <div className=''>
               <button
+              ref={trigger}
                 className="text-gray-500 hover:text-gray-400 lg:hidden block"
                 aria-controls="sidebar"
                 aria-expanded={sidebarOpen}
@@ -63,7 +64,7 @@ function Header({sidebarOpen,setSidebarOpen,profileUser}) {
                   <rect x="4" y="17" width="16" height="2" />
                 </svg>
               </button>
-              <NavLink end to="/" className="text-white flex items-center justify-center gap-x-2">
+              <NavLink end to="/" className="text-white hidden lg:flex items-center justify-center gap-x-2">
                          <img className='h-10 w-10 object-cover rounded-full' src={"https://ttagencyads.com/wp-content/uploads/2022/03/logo-quan-y-quan-doi-nhan-dan-viet-nam.jpg"} alt="logo" />
                        <h2 className='font-bold text-xs lg:text-lg pt-2 lg:pt-0 uppercase'>
                          Quản lý sức khỏe
@@ -104,10 +105,11 @@ function Header({sidebarOpen,setSidebarOpen,profileUser}) {
                 </NavLink>
           </ul>
             {/* mobile  */}
-            <div className={`hidden top-0 left-0  flex-col justify-start items-start bg-white overflow-y-hidden h-screen sapce-y-2
+            <div className={`flex-col justify-start items-start bg-white overflow-y-hidden lg:hidden h-screen sapce-y-2
+                ${sidebarOpen ? "flex fixed top-0 left-0 w-64 p-4 z-50 shadow-lg" : "hidden"}
             `}>
               {/* ${sidebarOpen ? "fixed" : "opacity-0"} */}
-              <div className='text-end'>
+              <div className='text-end flex items-center justify-between w-full'>
                   <button
                   className="text-gray-500 hover:text-gray-600 dark:hover:text-gray-400 lg:hidden"
                   aria-controls="sidebar"
